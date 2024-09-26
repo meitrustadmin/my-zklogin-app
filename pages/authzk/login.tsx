@@ -13,7 +13,7 @@ import {
   getTwitchAuthUrl,
   relativeToCurrentEpoch,
   withNewZkLoginSession,
-} from "@shinami/nextjs-zklogin/client";
+} from "@/lib/zklogin/client";
 import { useRouter } from "next/router";
 
 // This page should be installed at path "/auth/login".

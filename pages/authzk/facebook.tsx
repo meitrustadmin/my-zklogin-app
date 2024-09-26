@@ -1,4 +1,4 @@
-import { withFacebookCallback } from "@shinami/nextjs-zklogin/client";
+import { withFacebookCallback } from "@/lib/zklogin/client";
 
 export default withFacebookCallback(({ status }) => {
   switch (status) {

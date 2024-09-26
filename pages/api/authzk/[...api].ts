@@ -5,7 +5,7 @@ import {
   GOOGLE_CLIENT_ID,
   TWITCH_CLIENT_ID,
 } from "@/lib/shared/openid";
-import { authHandler } from "@shinami/nextjs-zklogin/server/pages";
+import { authHandler } from "@/lib/zklogin/server/pages";
 
 // This handler should be installed at route "/api/auth/[...api]".
 // If you need to use a different path, set env NEXT_PUBLIC_AUTH_API_BASE to override the default.

@@ -2,7 +2,7 @@ import {
   ApiError,
   WithKeyPair,
   apiTxExecMutationFn,
-} from "@shinami/nextjs-zklogin/client";
+} from "@/lib/zklogin/client";
 import {
   UseMutationResult,
   useMutation,

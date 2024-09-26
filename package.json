@@ -6,10 +6,14 @@
     "start": "next start"
   },
   "dependencies": {
-    "@shinami/nextjs-zklogin": "^0.4.1",
     "next": "latest",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@mysten/zklogin": "^0.7.4",
+    "@shinami/clients": "^0.9.0",
+    "@tanstack/react-query": "^5.0.5",
+    "iron-session": "^6.3.1",
+    "superstruct": "^2.0.2"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",

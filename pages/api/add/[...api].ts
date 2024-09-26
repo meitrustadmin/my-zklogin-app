@@ -8,7 +8,7 @@ import {
   InvalidRequest,
   TransactionResponseParser,
   zkLoginSponsoredTxExecHandler,
-} from "@shinami/nextjs-zklogin/server/pages";
+} from "@/lib/zklogin/server/pages";
 import { mask, validate } from "superstruct";
 
 /**

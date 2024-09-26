@@ -1,6 +1,6 @@
 import { getSuiVisionAccountUrl } from "@/lib/hooks/sui";
-import { AUTH_API_BASE, LOGIN_PAGE_PATH } from "@shinami/nextjs-zklogin";
-import { useZkLoginSession } from "@shinami/nextjs-zklogin/client";
+import { AUTH_API_BASE, LOGIN_PAGE_PATH } from "@/lib/zklogin/env";
+import { useZkLoginSession } from "@/lib/zklogin/client";
 import Link from "next/link";
 
 // This is a publically accessible page, displaying optional contents for signed-in users.

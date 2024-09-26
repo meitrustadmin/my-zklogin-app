@@ -1,4 +1,4 @@
-import { withTwitchCallback } from "@shinami/nextjs-zklogin/client";
+import { withTwitchCallback } from "@/lib/zklogin/client";
 
 export default withTwitchCallback(({ status }) => {
   switch (status) {

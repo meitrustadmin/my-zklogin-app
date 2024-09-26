@@ -1,5 +1,5 @@
 import { SuiClient } from "@mysten/sui/client";
-import { SaltProvider, ZkProofProvider } from "@shinami/nextjs-zklogin/server";
+import { SaltProvider, ZkProofProvider } from "@/lib/zklogin/server";
 import { SUI_NETWORK } from "../shared/sui";
 
 const MYSTEN_SUI_NODE_URL = `https://fullnode.${SUI_NETWORK}.sui.io:443`;

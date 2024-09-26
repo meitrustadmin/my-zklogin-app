@@ -1,6 +1,6 @@
 # Next.js with zkLogin Example
 
-This example shows how to use `@shinami/nextjs-zklogin` to unify user authentication and Sui transaction signing for your Next.js application, using [zkLogin](https://docs.sui.io/concepts/cryptography/zklogin).
+This example shows how to use `@/lib/zklogin` to unify user authentication and Sui transaction signing for your Next.js application, using [zkLogin](https://docs.sui.io/concepts/cryptography/zklogin).
 With this unification, you can deliver a user experience like the following:
 
 - User signs into your application using one of the supported social identity providers.

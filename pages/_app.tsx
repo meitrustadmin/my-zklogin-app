@@ -1,4 +1,4 @@
-import { ZkLoginSessionProvider } from "@shinami/nextjs-zklogin/client";
+import { ZkLoginSessionProvider } from "@/lib/zklogin/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 
