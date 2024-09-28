@@ -8,6 +8,7 @@ import {
   genAddressSeed,
   generateNonce,
 } from "@mysten/zklogin";
+import { ZkLoginPublicIdentifier, toZkLoginPublicIdentifier } from '@mysten/sui/zklogin'
 import { withIronSessionApiRoute } from "iron-session/next";
 import { jwtVerify } from "jose";
 import { NextApiHandler, NextApiRequest } from "next";
@@ -32,6 +33,7 @@ import {
 } from "../../providers";
 import { sessionConfig } from "../session";
 import { methodDispatcher } from "../utils";
+import { hexToBytes } from '@noble/hashes/utils';
 
 class ZkLoginAuthError extends Error {}
 
@@ -129,6 +131,14 @@ async function getZkLoginUser<T>(
     keyClaimValue,
     aud,
   ).toString();
+  //console.log('salt ' + salt + ' keyClaimName ' + body.keyClaimName + ' keyClaimValue ' + keyClaimValue + ' aud ' + aud)
+  //console.log('address seed ' + addressSeed)
+  //console.log('iss ' + iss)
+   const identifier = toZkLoginPublicIdentifier(BigInt(addressSeed), iss);
+   //const identifier = toPkIdentifier(addressSeed, iss)
+  // console.log(new TextEncoder().encode(wallet))
+  //const identifier = new ZkLoginPublicIdentifier(new TextEncoder().encode(wallet))
+   console.log('identifier ' + identifier.toBase64())
   const partialProof = await getZkProof(zkProofProvider, {
     jwt: body.jwt,
     ephemeralPublicKey: publicKeyFromBase64(body.extendedEphemeralPublicKey),
@@ -145,9 +155,49 @@ async function getZkLoginUser<T>(
     authContext,
     maxEpoch: body.maxEpoch,
     wallet,
+    identifier: identifier.toBase64(),
     zkProof: { ...partialProof, addressSeed },
   };
 }
+
+// function toPkIdentifier(addressSeed: string, iss: string): ZkLoginPublicIdentifier {
+//     // const addressSeed = genAddressSeed(
+//     //     BigInt(account.userSalt),
+//     //     'sub',
+//     //     account.sub,
+//     //     account.aud,
+//     // ).toString();
+//     console.log('address seed ' + BigInt(addressSeed))
+//     console.log('iss ' +  iss)
+//     let pk = toZkLoginPublicIdentifier(
+//         BigInt(addressSeed),
+//         iss,
+//     )
+//     console.log(pk)
+//     return pk;
+// }
+
+// function toZkLoginPublicIdentifier(
+// 	addressSeed: bigint,
+// 	iss: string,
+// ): ZkLoginPublicIdentifier {
+// 	// Consists of iss_bytes_len || iss_bytes || padded_32_byte_address_seed.
+// 	const addressSeedBytesBigEndian = toPaddedBigEndianBytes(addressSeed, 32);
+//     console.log(addressSeed)
+//     console.log(JSON.stringify(iss))
+// 	const issBytes = new TextEncoder().encode(iss);
+// 	const tmp = new Uint8Array(1 + issBytes.length + addressSeedBytesBigEndian.length);
+// 	tmp.set([issBytes.length], 0);
+// 	tmp.set(issBytes, 1);
+// 	tmp.set(addressSeedBytesBigEndian, 1 + issBytes.length);
+//     //console.log(new TextDecoder().decode(tmp))
+// 	return new ZkLoginPublicIdentifier(tmp);
+// }
+
+// export function toPaddedBigEndianBytes(num: bigint, width: number): Uint8Array {
+// 	const hex = num.toString(16);
+// 	return hexToBytes(hex.padStart(width * 2, '0').slice(-width * 2));
+// }
 
 function loginHandler(
   epochProvider: CurrentEpochProvider,

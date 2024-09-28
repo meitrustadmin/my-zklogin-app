@@ -4,6 +4,7 @@
  */
 
 import { getZkLoginSignature } from "@mysten/sui/zklogin";
+import { ZkLoginPublicIdentifier} from "@mysten/sui/zklogin";
 import { ZkLoginUserId } from "@shinami/clients/sui";
 import {
   Infer,
@@ -16,6 +17,8 @@ import {
   string,
   type,
   union,
+  record,
+  any,
 } from "superstruct";
 import { publicKeyFromBase64 } from "./utils";
 export { ZkLoginUserId } from "@shinami/clients/sui";
@@ -68,6 +71,7 @@ export const MinimalJwtClaims = object({
 export type MinimalJwtClaims = Infer<typeof MinimalJwtClaims>;
 export type JwtClaims = MinimalJwtClaims & Record<string, unknown>;
 
+
 export const ZkLoginUser = object({
   id: ZkLoginUserId,
   oidProvider: OidProvider,
@@ -75,6 +79,7 @@ export const ZkLoginUser = object({
   authContext: type({}),
   maxEpoch: integer(),
   wallet: string(),
+  identifier: any(),
   zkProof: type({}),
 });
 export type ZkLoginUser<T = unknown> = Omit<

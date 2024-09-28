@@ -2,6 +2,7 @@ import { getSuiVisionAccountUrl } from "@/lib/hooks/sui";
 import { AUTH_API_BASE, LOGIN_PAGE_PATH } from "@/lib/zklogin/env";
 import { useZkLoginSession } from "@/lib/zklogin/client";
 import Link from "next/link";
+import { fromB64, toB64 } from '@mysten/sui/utils';
 
 // This is a publically accessible page, displaying optional contents for signed-in users.
 export default function Index() {
@@ -18,6 +19,9 @@ export default function Index() {
           <Link href={getSuiVisionAccountUrl(user.wallet)} target="_blank">
             My zkLogin wallet address
           </Link>
+        </div>
+        <div>
+          ZK Identifier: {user.identifier}
         </div>
         <div>
           <Link href="/protected">Sui calculator</Link>
