@@ -79,6 +79,9 @@ export const ZkLoginUser = object({
   authContext: type({}),
   maxEpoch: integer(),
   wallet: string(),
+  //multisig_address: string(),
+  addressSeed: string(),
+  iss: string(),
   identifier: any(),
   zkProof: type({}),
 });

@@ -1,0 +1,27 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model auth_recovery {
+  id String @id @default(cuid())
+  provider String
+  identifier String 
+  iss String
+  aud String
+  key_claim_name String
+  key_claim_value String
+  wallet String
+  multisig_address String
+  index Int
+  create_at DateTime @default(now())
+  update_at DateTime
+  status String
+  @@unique([identifier, status], name: "unique_identifier")
+}
+
+

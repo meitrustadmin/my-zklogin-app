@@ -2,7 +2,7 @@ import {
   ApiError,
   WithKeyPair,
   apiTxExecMutationFn,
-} from "@/lib/zklogin/client";
+} from "lib/zklogin/client";
 import {
   UseMutationResult,
   useMutation,

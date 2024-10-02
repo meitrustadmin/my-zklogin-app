@@ -37,6 +37,7 @@ import { hexToBytes } from '@noble/hashes/utils';
 
 class ZkLoginAuthError extends Error {}
 
+
 async function getExpires(
   req: NextApiRequest,
   epochProvider: CurrentEpochProvider,
@@ -67,7 +68,7 @@ async function getZkLoginUser<T>(
 ): Promise<ZkLoginUser<T>> {
   const [error, body] = validate(req.body, ZkLoginRequest);
   if (error) throw new ZkLoginAuthError(error.message);
-
+  console.log('jwt ' + JSON.stringify(body.jwt))
   const oidConfig = oidProviders[body.oidProvider];
 
   let jwtClaims;
@@ -112,7 +113,7 @@ async function getZkLoginUser<T>(
   );
   if (authContext === undefined)
     throw new ZkLoginAuthError("User not authorized");
-
+  
   const salt = await getSalt(saltProvider, {
     jwt: body.jwt,
     keyClaimName: body.keyClaimName,
@@ -131,14 +132,13 @@ async function getZkLoginUser<T>(
     keyClaimValue,
     aud,
   ).toString();
-  //console.log('salt ' + salt + ' keyClaimName ' + body.keyClaimName + ' keyClaimValue ' + keyClaimValue + ' aud ' + aud)
-  //console.log('address seed ' + addressSeed)
-  //console.log('iss ' + iss)
-   const identifier = toZkLoginPublicIdentifier(BigInt(addressSeed), iss);
-   //const identifier = toPkIdentifier(addressSeed, iss)
-  // console.log(new TextEncoder().encode(wallet))
-  //const identifier = new ZkLoginPublicIdentifier(new TextEncoder().encode(wallet))
-   console.log('identifier ' + identifier.toBase64())
+
+  const identifier = toZkLoginPublicIdentifier(BigInt(addressSeed), iss);
+
+  // const recovery = await checkAuthRecoveryExists([identifier.toBase64()])
+  // if (recovery === 'undefined') {
+  //     throw new Error('recovery not found, identifier is ' + identifier.toBase64())
+  // }
   const partialProof = await getZkProof(zkProofProvider, {
     jwt: body.jwt,
     ephemeralPublicKey: publicKeyFromBase64(body.extendedEphemeralPublicKey),
@@ -155,7 +155,10 @@ async function getZkLoginUser<T>(
     authContext,
     maxEpoch: body.maxEpoch,
     wallet,
+    //multisig_address: recovery.multisig_address,
     identifier: identifier.toBase64(),
+    addressSeed: addressSeed,
+    iss: iss,
     zkProof: { ...partialProof, addressSeed },
   };
 }

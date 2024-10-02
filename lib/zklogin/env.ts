@@ -18,3 +18,7 @@ export const AUTH_API_BASE =
  */
 export const LOGIN_PAGE_PATH =
   process.env.NEXT_PUBLIC_LOGIN_PAGE_PATH ?? "/authzk/login";
+
+
+export const RECOVER_PAGE_PATH =
+  process.env.NEXT_PUBLIC_RECOVE_PAGE_PATH ?? "/authzk/recover";

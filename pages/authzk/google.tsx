@@ -1,4 +1,4 @@
-import { withGoogleCallback } from "@/lib/zklogin/client";
+import { withGoogleCallback } from "lib/zklogin/client";
 
 export default withGoogleCallback(({ status }) => {
   switch (status) {

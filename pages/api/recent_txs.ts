@@ -1,6 +1,6 @@
-import { sui } from "@/lib/api/shinami";
-import { RecentTxsResponse } from "@/lib/shared/interfaces";
-import { withZkLoginUserRequired } from "@/lib/zklogin/server/pages";
+import { sui } from "lib/api/shinami";
+import { RecentTxsResponse } from "lib/shared/interfaces";
+import { withZkLoginUserRequired } from "lib/zklogin/server/pages";
 
 // This is an auth-protected API route, augmented with user's zkLogin info.
 export default withZkLoginUserRequired<RecentTxsResponse>(

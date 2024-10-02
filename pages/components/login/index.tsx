@@ -13,14 +13,11 @@ import {
   getTwitchAuthUrl,
   relativeToCurrentEpoch,
   withNewZkLoginSession,
+  ZkLoginSession,
 } from "lib/zklogin/client";
 import { useRouter } from "next/router";
 
-// This page should be installed at path "/auth/login".
-// If you move it to a different path, remember to update env NEXT_PUBLIC_LOGIN_PAGE_PATH.
-export default withNewZkLoginSession(
-  () => relativeToCurrentEpoch(sui),
-  ({ session }) => {
+const Login =  ({ session } : { session: any }) => {
     const router = useRouter();
     const redirectTo = first(router.query.redirectTo);
 
@@ -101,5 +98,6 @@ export default withNewZkLoginSession(
         )}
       </>
     );
-  },
-);
+}
+
+export default Login;
