@@ -1,3 +1,5 @@
+import { API_HOST } from "lib/api/move";
+
 /**
  * Converts a string to an array.
  * If the input is already an array, it returns the input.
@@ -23,3 +25,26 @@ export function stringToArray(input: string | any[]): any[] {
   
   return [input];
 }
+
+
+export async function checkAuthRecoveryExists (identifiers: string[]) {
+  try {
+      const response = await fetch(`${API_HOST}/api/recover/getbyidentifiers`, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ identifiers }),
+      });
+      
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      
+      const data = await response.json();
+      return data
+  } catch (error) {
+      console.error('Error checking auth recovery:', error);
+  }
+};
+

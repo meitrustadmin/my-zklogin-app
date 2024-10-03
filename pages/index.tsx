@@ -86,12 +86,10 @@ export default function Index() {
 
         loadIdentifiersFromSessionStorage();
     }, []);
-
   const handleAdd = () => {
     sessionStorage.removeItem('isFirstLoad');
     setShowRecover(true);
   }
-
     const checkAuthRecoveryExists = async (identifiers: string[]) => {
         try {
             const response = await fetch('/api/recover/get', {

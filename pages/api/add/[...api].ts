@@ -11,38 +11,18 @@ import {
 } from "lib/zklogin/server/pages";
 import { mask, validate } from "superstruct";
 
-const checkAuthRecoveryExists = async (identifiers: string[]) => {
-  try {
-      const response = await fetch('/api/recover/get', {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ identifiers }),
-      });
-      
-      if (!response.ok) {
-          throw new Error('Network response was not ok');
-      }
-      
-      const data = await response.json();
-      return data
-  } catch (error) {
-      console.error('Error checking auth recovery:', error);
-  }
-};
 
 /**
  * Builds a gasless transaction according to the request.
  */
-const buildTx: GaslessTransactionBuilder = async (req, { wallet }) => {
+const buildTx: GaslessTransactionBuilder = async (req, { wallet, multisig_address }) => {
   const [error, body] = validate(req.body, AddRequest);
   if (error) throw new InvalidRequest(error.message);
 
   console.log("Preparing add tx for zkLogin wallet", wallet);
 
   return await buildGaslessTransaction((txb) => {
-    //txb.setSender('')
+    txb.setSender(multisig_address)
     // Source code for this example Move function:
     // https://github.com/shinamicorp/shinami-typescript-sdk/blob/90f19396df9baadd71704a0c752f759c8e7088b4/move_example/sources/math.move#L13
     txb.moveCall({
