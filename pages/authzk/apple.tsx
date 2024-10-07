@@ -1,4 +1,4 @@
-import { withAppleCallback } from "@/lib/zklogin/client";
+import { withAppleCallback } from "lib/zklogin/client";
 
 export default withAppleCallback(({ status }) => {
   switch (status) {

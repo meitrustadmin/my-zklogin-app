@@ -1,26 +1,28 @@
-import { EXAMPLE_MOVE_PACKAGE_ID } from "@/lib/api/move";
-import { gas, sui } from "@/lib/api/shinami";
-import { AddRequest, AddResponse, AddResult } from "@/lib/shared/interfaces";
-import { first } from "@/lib/shared/utils";
+import { EXAMPLE_MOVE_PACKAGE_ID } from "lib/api/move";
+import { gas, sui } from "lib/api/shinami";
+import { AddRequest, AddResponse, AddResult } from "lib/shared/interfaces";
+import { first } from "lib/shared/utils";
 import { buildGaslessTransaction } from "@shinami/clients/sui";
 import {
   GaslessTransactionBuilder,
   InvalidRequest,
   TransactionResponseParser,
   zkLoginSponsoredTxExecHandler,
-} from "@/lib/zklogin/server/pages";
+} from "lib/zklogin/server/pages";
 import { mask, validate } from "superstruct";
+
 
 /**
  * Builds a gasless transaction according to the request.
  */
-const buildTx: GaslessTransactionBuilder = async (req, { wallet }) => {
+const buildTx: GaslessTransactionBuilder = async (req, { wallet, multisig_address }) => {
   const [error, body] = validate(req.body, AddRequest);
   if (error) throw new InvalidRequest(error.message);
 
   console.log("Preparing add tx for zkLogin wallet", wallet);
 
   return await buildGaslessTransaction((txb) => {
+    txb.setSender(multisig_address)
     // Source code for this example Move function:
     // https://github.com/shinamicorp/shinami-typescript-sdk/blob/90f19396df9baadd71704a0c752f759c8e7088b4/move_example/sources/math.move#L13
     txb.moveCall({

@@ -4,7 +4,6 @@
  */
 
 import { getZkLoginSignature } from "@mysten/sui/zklogin";
-import { ZkLoginPublicIdentifier} from "@mysten/sui/zklogin";
 import { ZkLoginUserId } from "@shinami/clients/sui";
 import {
   Infer,
@@ -79,6 +78,9 @@ export const ZkLoginUser = object({
   authContext: type({}),
   maxEpoch: integer(),
   wallet: string(),
+  multisig_address: string(),
+  addressSeed: string(),
+  iss: string(),
   identifier: any(),
   zkProof: type({}),
 });

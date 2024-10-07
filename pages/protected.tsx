@@ -1,7 +1,7 @@
-import { useAddMutation, useRecentTxsQuery } from "@/lib/hooks/api";
-import { getSuiVisionTransactionUrl } from "@/lib/hooks/sui";
-import { AddResponse } from "@/lib/shared/interfaces";
-import { withZkLoginSessionRequired } from "@/lib/zklogin/client";
+import { useAddMutation, useRecentTxsQuery } from "lib/hooks/api";
+import { getSuiVisionTransactionUrl } from "lib/hooks/sui";
+import { AddResponse } from "lib/shared/interfaces";
+import { withZkLoginSessionRequired } from "lib/zklogin/client/index";
 import Link from "next/link";
 import { useState } from "react";
 

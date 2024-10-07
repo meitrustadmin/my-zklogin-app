@@ -34,8 +34,10 @@ import {
 import { sessionConfig } from "../session";
 import { methodDispatcher } from "../utils";
 import { hexToBytes } from '@noble/hashes/utils';
+import { checkAuthRecoveryExists } from "pages/utils";
 
 class ZkLoginAuthError extends Error {}
+
 
 async function getExpires(
   req: NextApiRequest,
@@ -67,7 +69,7 @@ async function getZkLoginUser<T>(
 ): Promise<ZkLoginUser<T>> {
   const [error, body] = validate(req.body, ZkLoginRequest);
   if (error) throw new ZkLoginAuthError(error.message);
-
+  // console.log('jwt ' + JSON.stringify(body.jwt))
   const oidConfig = oidProviders[body.oidProvider];
 
   let jwtClaims;
@@ -112,7 +114,7 @@ async function getZkLoginUser<T>(
   );
   if (authContext === undefined)
     throw new ZkLoginAuthError("User not authorized");
-
+  
   const salt = await getSalt(saltProvider, {
     jwt: body.jwt,
     keyClaimName: body.keyClaimName,
@@ -131,14 +133,19 @@ async function getZkLoginUser<T>(
     keyClaimValue,
     aud,
   ).toString();
-  //console.log('salt ' + salt + ' keyClaimName ' + body.keyClaimName + ' keyClaimValue ' + keyClaimValue + ' aud ' + aud)
-  //console.log('address seed ' + addressSeed)
-  //console.log('iss ' + iss)
-   const identifier = toZkLoginPublicIdentifier(BigInt(addressSeed), iss);
-   //const identifier = toPkIdentifier(addressSeed, iss)
-  // console.log(new TextEncoder().encode(wallet))
-  //const identifier = new ZkLoginPublicIdentifier(new TextEncoder().encode(wallet))
-   console.log('identifier ' + identifier.toBase64())
+
+  const identifier = toZkLoginPublicIdentifier(BigInt(addressSeed), iss);
+
+  const recoveries = await checkAuthRecoveryExists([identifier.toBase64()])
+  if (recoveries.length === 0) {
+      throw new Error('recovery not found, identifier is ' + identifier.toBase64())
+  }
+
+  if (recoveries.length > 1) {
+    throw new Error('more than 1 records found, identifier is ' + identifier.toBase64())
+  }
+  //console.log('in login ' + JSON.stringify(recoveries))
+  const recovery = recoveries[0]
   const partialProof = await getZkProof(zkProofProvider, {
     jwt: body.jwt,
     ephemeralPublicKey: publicKeyFromBase64(body.extendedEphemeralPublicKey),
@@ -155,7 +162,10 @@ async function getZkLoginUser<T>(
     authContext,
     maxEpoch: body.maxEpoch,
     wallet,
+    multisig_address: recovery.multisig_address,
     identifier: identifier.toBase64(),
+    addressSeed: addressSeed,
+    iss: iss,
     zkProof: { ...partialProof, addressSeed },
   };
 }
