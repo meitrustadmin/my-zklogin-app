@@ -8,6 +8,7 @@ import { API_HOST, RPID } from "lib/api/move";
 import { withZkLoginSessionRequired } from "lib/zklogin/client";
 import { GetServerSideProps } from "next";
 import { AUTH_API_BASE } from "lib/zklogin/env";
+import Link from "next/link";
 
 // export const getServerSideProps: GetServerSideProps = async (context: any) => {
 //   const challenge = generateChallenge();
@@ -181,6 +182,7 @@ function Create() {
       ) : (
         <p>Sorry, webauthn is not available.</p>
       )}
+      <Link href="/">Home</Link>
       <div>
           <button onClick={handleSignOut}>Sign out</button>
       </div>
