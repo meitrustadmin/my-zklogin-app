@@ -1,5 +1,5 @@
 import {SecureStoragePlugin} from 'capacitor-secure-storage-plugin';
-import {DEFAULT_RELAYS, PLATFORM} from '../const';
+import {DEFAULT_RELAYS, PLATFORM} from 'const';
 import {Keys, RelayDict} from '../types/index';
 
 const isCapacitor = PLATFORM === 'ios' || PLATFORM === 'android';

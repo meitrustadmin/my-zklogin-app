@@ -1,6 +1,6 @@
 import {atom} from 'jotai';
 import {atomWithStorage} from 'jotai/utils'
-import { Keys } from 'pages/types/index';
+import { Keys } from 'types/index';
 
 
 //export const identifiersAtom = atomWithStorage<any[] | undefined>('identifiers', undefined);

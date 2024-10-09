@@ -1,5 +1,5 @@
 import { SuiClient } from "@mysten/sui/client";
-import { SaltProvider, ZkProofProvider } from "@/lib/zklogin/server";
+import { SaltProvider, ZkProofProvider } from "lib/zklogin/server";
 import { SUI_NETWORK } from "../shared/sui";
 
 const MYSTEN_SUI_NODE_URL = `https://fullnode.${SUI_NETWORK}.sui.io:443`;
@@ -21,7 +21,7 @@ export const mystenSaltProvider: SaltProvider = async ({
   jwt,
   keyClaimName,
   subWallet,
-}) => {
+}: {jwt: string, keyClaimName: string, subWallet: number}) => {
   if (keyClaimName !== "sub")
     throw new Error("Only 'sub' claim is supported by Mysten salt server");
   if (subWallet !== 0)
@@ -57,7 +57,7 @@ export const mystenProver: ZkProofProvider = async ({
   jwtRandomness,
   salt,
   keyClaimName,
-}) => {
+} : {jwt: any, ephemeralPublicKey: any, maxEpoch: any, jwtRandomness: any, salt: any, keyClaimName: string}) => {
   const resp = await fetch(MYSTEN_PROVER_URL, {
     method: "POST",
     headers: {

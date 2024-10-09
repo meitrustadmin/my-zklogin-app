@@ -1,0 +1,17 @@
+{
+    "name": "Swall App",
+    "short_name": "Swall",
+    "icons": [
+      {
+        "src": "/images/swall.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "theme_color": "#FFFFFF",
+    "background_color": "#FFFFFF",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait"
+}
