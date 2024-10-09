@@ -19,7 +19,7 @@ import type {
 } from "@github/webauthn-json";
 
 const HOST_SETTINGS = {
-  expectedOrigin: process.env.VERCEL_URL ?? "http://localhost:3000",
+  expectedOrigin: process.env.VERCEL_URL ?? API_HOST,
   expectedRPID: process.env.RPID ?? "localhost",
 };
 import { API_HOST } from "lib/api/move";

@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { useZkLoginSession, useSaveZkLoginLocalSession } from "lib/zklogin/client/hooks/session";
 import axios from 'axios';
 import { stringToArray } from "../utils";
+import { API_HOST } from "lib/api/move";
 
 
 // This is a publically accessible page, displaying optional contents for signed-in users.
@@ -91,7 +92,7 @@ export default function Index() {
   }
     const checkAuthRecoveryExists = async (identifiers: string[]) => {
         try {
-            const response = await fetch('/api/recover/getbyidentifiers', {
+            const response = await fetch(`${API_HOST}/api/recover/getbyidentifiers`, {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
