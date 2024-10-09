@@ -28,6 +28,7 @@ import crypto from "crypto";
 
 async function handler(request: NextApiRequest, response: NextApiResponse) {
   try {
+    console.log('RPID', JSON.stringify(RPID))
     const user = await register(request);
     request.session.userId = user.id;
     await request.session.save();
