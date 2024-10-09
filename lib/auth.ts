@@ -13,13 +13,13 @@ import type {
 } from "@github/webauthn-json";
 import crypto from "crypto";
 import { GetServerSidePropsContext, NextApiRequest } from "next";
-import { API_HOST } from "./api/move";
+import { API_HOST, RPID } from "./api/move";
 
 type SessionRequest = NextApiRequest | GetServerSidePropsContext["req"];
 
 const HOST_SETTINGS = {
   expectedOrigin: process.env.VERCEL_URL ?? API_HOST,
-  expectedRPID: process.env.RPID ?? process.env.RPID,
+  expectedRPID: RPID,
 };
 
 function clean(str: string) {
