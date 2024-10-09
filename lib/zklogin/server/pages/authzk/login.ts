@@ -94,6 +94,10 @@ async function getZkLoginUser<T>(
     throw new ZkLoginAuthError("Invalid jwt nonce");
 
   const iss = jwtClaims.iss!;
+  const email = jwtClaims.email
+  //console.log('email ' + email)
+  const email_verified = jwtClaims.email_verified
+  //console.log('email_verified ' + email_verified)
   const aud = first(jwtClaims.aud)!;
   const keyClaimValue = jwtClaims[body.keyClaimName] as string;
   const id: ZkLoginUserId = {
@@ -161,6 +165,7 @@ async function getZkLoginUser<T>(
     multisig_address: multisig_address,
     identifier: identifier.toBase64(),
     addressSeed: addressSeed,
+    email: email as string,
     iss: iss,
     zkProof: { ...partialProof, addressSeed },
   };

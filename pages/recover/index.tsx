@@ -37,6 +37,7 @@ export default function Recover() {
                     keyClaimName: user.id.keyClaimName,
                     keyClaimValue: user.id.keyClaimValue,
                     address: user.wallet,
+                    email: user.email,
                     index: identifiers?.length || 0,
                 };
                 // Set the flag in sessionStorage
@@ -210,6 +211,7 @@ export default function Recover() {
                 <>
                  <li key={index}>
                     <p>Provider: {identifier.provider}</p>
+                    <p>Email: {identifier.email}</p>
                     <p>Identifier: {identifier.identifier}</p>
                     <p>Address: {identifier.address}</p>
                   </li>

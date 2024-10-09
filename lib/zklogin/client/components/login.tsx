@@ -133,6 +133,7 @@ export function getFacebookAuthUrl(
   callback: string | URL,
   redirectTo = "/",
   extraScopes: string[] = [],
+  auth_type: string = 'reauthenticate'
 ): URL {
   if (typeof callback === "string")
     callback = new URL(callback, window.location.href);
@@ -144,6 +145,7 @@ export function getFacebookAuthUrl(
     scope: ["openid", ...extraScopes].join(" "),
     nonce: session.nonce,
     state: new URLSearchParams({ redirectTo, nonce: session.nonce }).toString(),
+    auth_type: auth_type,
   }).toString();
 
   return new URL(`https://www.facebook.com/v18.0/dialog/oauth?${params}`);

@@ -38,7 +38,7 @@ export default withNewZkLoginSession(
                         GOOGLE_CLIENT_ID!,
                         "google", // Update if moved to another path
                         redirectTo,
-                        [],
+                        ['email'],
                         ['select_account']
                     ),
                     );

@@ -82,6 +82,7 @@ export const ZkLoginUser = object({
   addressSeed: string(),
   iss: string(),
   identifier: any(),
+  email: string(),
   zkProof: type({}),
 });
 export type ZkLoginUser<T = unknown> = Omit<
