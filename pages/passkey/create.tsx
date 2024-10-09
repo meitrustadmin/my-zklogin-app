@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { API_HOST, RPID } from "lib/api/move";
 import { withZkLoginSessionRequired } from "lib/zklogin/client";
 import { GetServerSideProps } from "next";
+import { AUTH_API_BASE } from "lib/zklogin/env";
 
 // export const getServerSideProps: GetServerSideProps = async (context: any) => {
 //   const challenge = generateChallenge();
@@ -139,6 +140,12 @@ function Create() {
       setError(message);
     }
   };
+  const handleSignOut = () => {
+    sessionStorage.removeItem('isFirstLoad')
+    sessionStorage.removeItem('identifiers')
+    //setIdentifiers([])
+    router.push(`${AUTH_API_BASE}/logout`)
+}
 
   return (
     <Fragment>
@@ -151,7 +158,11 @@ function Create() {
             name="username"
             placeholder="Username"
             value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            onChange={(event) => {
+              setUsername(event.target.value)
+              setFinished(false)
+              setError('')
+            }}
           />
           <input
             type="text"
@@ -159,7 +170,10 @@ function Create() {
             name="displayName"
             placeholder="Display Name"
             value={displayname}
-            onChange={(event) => setDisplayname(event.target.value)}
+            onChange={(event) => {
+              setDisplayname(event.target.value) 
+              setFinished(false)
+              setError('')}}
           />
           <input type="submit" value="Register" />
           {error != null ? <pre>{error}</pre> : null}
@@ -167,6 +181,9 @@ function Create() {
       ) : (
         <p>Sorry, webauthn is not available.</p>
       )}
+      <div>
+          <button onClick={handleSignOut}>Sign out</button>
+      </div>
       {finished ? <p>Registration successful!</p> : null}
     </Fragment>
   );

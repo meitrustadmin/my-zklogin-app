@@ -16,9 +16,9 @@ export default withZkLoginSessionRequired(({ session } : {session: any}) => {
             <li>
                 <Link href="/passkey/create">Create</Link>
             </li>
-            <li>
+            {/* <li>
                 <Link href="/passkey/verify">Verify</Link>
-            </li>
+            </li> */}
             </ul>
             <p>
             <a href="https://ianmitchell.dev/blog/nextjs-and-webauthn">

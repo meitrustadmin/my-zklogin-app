@@ -251,15 +251,14 @@ export default function Index() {
         {/* <div>
           <Link href={RECOVER_PAGE_PATH}>Recover</Link>
         </div> */}
-        <div>
+        {/* <div>
           <Link href="/protected">Sui calculator</Link>
-        </div>
-        <div>
-          {/* <Link href={`${AUTH_API_BASE}/logout`}>Sign out</Link> */}
-          <button onClick={handleSignOut}>Sign out</button>
-        </div>
+        </div> */}
         <div>
           <Link href="/passkey/create">Create passkey</Link>
+        </div>
+        <div>
+          <button onClick={handleSignOut}>Sign out</button>
         </div>
     </>
     );
