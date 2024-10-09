@@ -4,7 +4,7 @@ import { withIronSessionSsr } from "iron-session/next";
 import { generateChallenge, isLoggedIn } from "lib/auth";
 import { sessionOptions } from "lib/session";
 import { useRouter } from "next/router";
-import { API_HOST } from "lib/api/move";
+import { API_HOST, RPID } from "lib/api/move";
 import { withZkLoginSessionRequired } from "lib/zklogin/client";
 import { GetServerSideProps } from "next";
 
@@ -92,7 +92,7 @@ function Create() {
         rp: {
           name: "next-webauthn",
           // TODO: Change
-          id: 'localhost',
+          id: RPID
         },
         user: { 
           id: window.crypto.randomUUID(),

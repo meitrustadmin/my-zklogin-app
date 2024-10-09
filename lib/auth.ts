@@ -18,8 +18,8 @@ import { API_HOST } from "./api/move";
 type SessionRequest = NextApiRequest | GetServerSidePropsContext["req"];
 
 const HOST_SETTINGS = {
-  expectedOrigin: process.env.VERCEL_URL ?? 'localhost',
-  expectedRPID: process.env.RPID ?? 'localhost',
+  expectedOrigin: process.env.VERCEL_URL ?? API_HOST,
+  expectedRPID: process.env.RPID ?? process.env.RPID,
 };
 
 function clean(str: string) {

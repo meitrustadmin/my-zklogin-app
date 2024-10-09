@@ -20,9 +20,9 @@ import type {
 
 const HOST_SETTINGS = {
   expectedOrigin: process.env.VERCEL_URL ?? API_HOST,
-  expectedRPID: process.env.RPID ?? "localhost",
+  expectedRPID: RPID
 };
-import { API_HOST } from "lib/api/move";
+import { API_HOST, RPID } from "lib/api/move";
 import crypto from "crypto";
 
 async function handler(request: NextApiRequest, response: NextApiResponse) {

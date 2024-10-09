@@ -11,4 +11,9 @@ if (!process.env.API_HOST) {
   console.warn("Warning: API_HOST is not set");
 }
 
+export const RPID = process.env.RPID || '';
+if (!process.env.RPID) {
+  console.warn("Warning: RPID is not set");
+}
+
 //export const API_HOST = ''
