@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import Providers from "../providers";
 import Head from "next/head";
+import 'dotenv/config'
 
 const queryClient = new QueryClient();
 

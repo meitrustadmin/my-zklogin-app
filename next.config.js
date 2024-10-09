@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const prod = process.env.NODE_ENV === 'production'
 const nextConfig = {
+    env: {
+        EXAMPLE_MOVE_PACKAGE_ID: process.env.NEXT_PUBLIC_EXAMPLE_MOVE_PACKAGE_ID,
+        API_HOST: process.env.NEXT_PUBLIC_API_HOST,
+        RPID: process.env.NEXT_PUBLIC_RPID
+    },
   //reactStrictMode: true,
   images: {
         remotePatterns: [

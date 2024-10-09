@@ -74,7 +74,7 @@ function Create() {
         "Content-Type": "application/json",
       },
     });
-    console.log('usernameCheckResponse', usernameCheckResponse);
+    //console.log('usernameCheckResponse', usernameCheckResponse);
     
     const user = await usernameCheckResponse.json();
     if (!usernameCheckResponse.ok) {
@@ -85,7 +85,7 @@ function Create() {
       setError("Username already in use");
       return;
     }
-
+    console.log('RP ID ', JSON.stringify(RPID))
     const credential = await create({
       publicKey: {
         challenge: challenge as string,

@@ -19,9 +19,10 @@ import type {
 } from "@github/webauthn-json";
 
 const HOST_SETTINGS = {
-  expectedOrigin: process.env.VERCEL_URL ?? API_HOST,
+  expectedOrigin: API_HOST,
   expectedRPID: RPID
 };
+
 import { API_HOST, RPID } from "lib/api/move";
 import crypto from "crypto";
 
@@ -85,7 +86,7 @@ async function register(request: NextApiRequest) {
     },
   });
 
-  console.log(`Registered new user ${user.id}`);
+ // console.log(`Registered new user ${user.id}`);
   return user;
 }
 
