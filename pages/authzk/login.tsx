@@ -22,7 +22,8 @@ export default withNewZkLoginSession(
   () => relativeToCurrentEpoch(sui),
   ({ session }) => {
     const router = useRouter();
-    const redirectTo = first(router.query.redirectTo);
+    //const redirectTo = first(router.query.redirectTo);
+    const redirectTo = window.location.origin +'/recover'
 
     // Render sign-in options based on what's configured.
     return (

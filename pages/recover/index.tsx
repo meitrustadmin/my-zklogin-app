@@ -2,21 +2,16 @@ import { getSuiVisionAccountUrl } from "lib/hooks/sui";
 import { AUTH_API_BASE, LOGIN_PAGE_PATH, RECOVER_PAGE_PATH } from "lib/zklogin/env";
 //import { useSaveZkLoginLocalSession, useZkLoginSession } from "lib/zklogin/client/index";
 import Link from "next/link";
-import { fromB64, toB64 } from '@mysten/sui/utils';
-import { identifiersAtom } from "../atoms";
-import { useAtom } from "jotai";
 import { Key, useEffect, useState } from "react";
 import { toZkLoginPublicIdentifier } from '@mysten/sui/zklogin';
 import { MultiSigPublicKey } from '@mysten/sui/multisig';
 import {PublicKey, SignatureScheme, decodeSuiPrivateKey } from '@mysten/sui/cryptography';
 import { useRouter } from "next/router";
 import { useZkLoginSession, useSaveZkLoginLocalSession } from "lib/zklogin/client/hooks/session";
-import axios from 'axios';
-import { stringToArray } from "../utils";
 
 
 // This is a publically accessible page, displaying optional contents for signed-in users.
-export default function Index() {
+export default function Recover() {
   const session = useZkLoginSession();
   const { user , isLoading } : { user: any, isLoading: boolean } = session;
   //const [identifiers, setIdentifiers] = useAtom(identifiersAtom);
@@ -85,10 +80,11 @@ export default function Index() {
 
         loadIdentifiersFromSessionStorage();
     }, []);
-  const handleAdd = () => {
-    sessionStorage.removeItem('isFirstLoad');
-    router.push('/recover')
-  }
+
+    const handleAdd = () => {
+        sessionStorage.removeItem('isFirstLoad');
+        router.push('/authzk/login')
+    }
     const checkAuthRecoveryExists = async (identifiers: string[]) => {
         try {
             const response = await fetch('/api/recover/getbyidentifiers', {
@@ -116,11 +112,10 @@ export default function Index() {
         identifiers.map(i => identifiersToSave.push(i.identifier))
         const data = await checkAuthRecoveryExists(identifiersToSave)
         console.log('data', data)
-        if (data) {
+        if (data && data.length > 0) {
             setUsed(data)
             return
         }
-        
         identifiers.forEach((item: any) => {
             let pk = toZkLoginPublicIdentifier(
                 BigInt(item.addressSeed),
@@ -154,7 +149,8 @@ export default function Index() {
             setIdentifiers([]);
             sessionStorage.removeItem('identifiers');
             sessionStorage.removeItem('isFirstLoad');
-        console.log('Recovery created:', result);
+            console.log('Recovery created:', result);
+            router.push('/passkey')
         } catch (error) {
         console.error('Error creating recovery:', error);
         }
