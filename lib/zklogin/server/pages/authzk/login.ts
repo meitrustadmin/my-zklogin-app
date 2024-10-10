@@ -197,45 +197,6 @@ async function getZkLoginUser<T>(
   };
 }
 
-// function toPkIdentifier(addressSeed: string, iss: string): ZkLoginPublicIdentifier {
-//     // const addressSeed = genAddressSeed(
-//     //     BigInt(account.userSalt),
-//     //     'sub',
-//     //     account.sub,
-//     //     account.aud,
-//     // ).toString();
-//     console.log('address seed ' + BigInt(addressSeed))
-//     console.log('iss ' +  iss)
-//     let pk = toZkLoginPublicIdentifier(
-//         BigInt(addressSeed),
-//         iss,
-//     )
-//     console.log(pk)
-//     return pk;
-// }
-
-// function toZkLoginPublicIdentifier(
-// 	addressSeed: bigint,
-// 	iss: string,
-// ): ZkLoginPublicIdentifier {
-// 	// Consists of iss_bytes_len || iss_bytes || padded_32_byte_address_seed.
-// 	const addressSeedBytesBigEndian = toPaddedBigEndianBytes(addressSeed, 32);
-//     console.log(addressSeed)
-//     console.log(JSON.stringify(iss))
-// 	const issBytes = new TextEncoder().encode(iss);
-// 	const tmp = new Uint8Array(1 + issBytes.length + addressSeedBytesBigEndian.length);
-// 	tmp.set([issBytes.length], 0);
-// 	tmp.set(issBytes, 1);
-// 	tmp.set(addressSeedBytesBigEndian, 1 + issBytes.length);
-//     //console.log(new TextDecoder().decode(tmp))
-// 	return new ZkLoginPublicIdentifier(tmp);
-// }
-
-// export function toPaddedBigEndianBytes(num: bigint, width: number): Uint8Array {
-// 	const hex = num.toString(16);
-// 	return hexToBytes(hex.padStart(width * 2, '0').slice(-width * 2));
-// }
-
 function loginHandler(
   epochProvider: CurrentEpochProvider,
   saltProvider: SaltProvider,

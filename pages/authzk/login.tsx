@@ -77,6 +77,9 @@ export default withNewZkLoginSession(
                         TWITCH_CLIENT_ID!,
                         "twitch", // Update if moved to another path
                         redirectTo,
+                        ['user:read:email'],
+                        ['email', 'name', 'picture', 'given_name', 'family_name'],
+                        true
                     ),
                     );
                 }}

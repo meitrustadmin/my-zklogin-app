@@ -178,6 +178,7 @@ export function getTwitchAuthUrl(
   redirectTo = "/",
   extraScopes: string[] = [],
   extraClaims: string[] = [],
+  force_verify: boolean = true,
 ): URL {
   if (typeof callback === "string")
     callback = new URL(callback, window.location.href);
@@ -192,6 +193,7 @@ export function getTwitchAuthUrl(
     }),
     nonce: session.nonce,
     state: new URLSearchParams({ redirectTo, nonce: session.nonce }).toString(),
+    force_verify: force_verify.toString(),
   }).toString();
 
   return new URL(`https://id.twitch.tv/oauth2/authorize?${params}`);
