@@ -38,7 +38,7 @@ export default withNewZkLoginSession(
                         GOOGLE_CLIENT_ID!,
                         "google", // Update if moved to another path
                         redirectTo,
-                        ['email'],
+                        ['email', 'profile'],
                         ['select_account']
                     ),
                     );
@@ -58,6 +58,7 @@ export default withNewZkLoginSession(
                         FACEBOOK_CLIENT_ID!,
                         "facebook", // Update if moved to another path
                         redirectTo,
+                        ['email'],
                     ),
                     );
                 }}

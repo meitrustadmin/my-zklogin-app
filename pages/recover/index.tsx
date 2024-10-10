@@ -38,6 +38,10 @@ export default function Recover() {
                     keyClaimValue: user.id.keyClaimValue,
                     address: user.wallet,
                     email: user.email,
+                    picture: user.picture,
+                    name: user.name,
+                    given_name: user.given_name,
+                    family_name: user.family_name,
                     index: identifiers?.length || 0,
                 };
                 // Set the flag in sessionStorage
@@ -199,7 +203,7 @@ export default function Recover() {
             
             {/* {typeof(JSON.stringify(identifiers))} */}
             {/* {JSON.stringify(identifiers)} */}
-            {duplicate ? <p className="mt-5">Duplicate identifier + {user.identifier}</p> : null}
+            {duplicate ? <h3 className="mt-5 text-red-500">{user.email} already added</h3> : null}
             {used && used.length > 0 ? (
               used.map((use: any, index: any) => (
                 <p key={index} className="mt-5">Identifier: {use.identifier} Used By Address: {use.multisig_address}</p>
@@ -212,6 +216,12 @@ export default function Recover() {
                  <li key={index}>
                     <p>Provider: {identifier.provider}</p>
                     <p>Email: {identifier.email}</p>
+                    {/* {identifier.picture && <img src={identifier.picture} width={100} height={100} className="rounded-full"/>} */}
+                    <p>Picture: {identifier.picture}</p>
+                    {/* <img src="https://lh3.googleusercontent.com/a/ACg8ocIv5Hkus7DuuncBhNULGJcbLuKGP82RYyH4FrHyjqq0NO6TmXs_=s96-c" width={100} height={100}/> */}
+                    <p>Full Name: {identifier.name}</p>
+                    <p>Given Name: {identifier.given_name}</p>
+                    <p>Family Name: {identifier.family_name}</p>
                     <p>Identifier: {identifier.identifier}</p>
                     <p>Address: {identifier.address}</p>
                   </li>

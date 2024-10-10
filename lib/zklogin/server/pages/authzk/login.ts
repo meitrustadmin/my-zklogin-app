@@ -69,7 +69,7 @@ async function getZkLoginUser<T>(
 ): Promise<ZkLoginUser<T>> {
   const [error, body] = validate(req.body, ZkLoginRequest);
   if (error) throw new ZkLoginAuthError(error.message);
-  // console.log('jwt ' + JSON.stringify(body.jwt))
+  console.log('jwt ' + JSON.stringify(body.jwt))
   const oidConfig = oidProviders[body.oidProvider];
 
   let jwtClaims;
@@ -99,6 +99,25 @@ async function getZkLoginUser<T>(
     email = jwtClaims.email as string 
   }
   console.log('email ' + email)
+  let picture = 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'
+  if (jwtClaims.picture) {
+    picture = jwtClaims.picture as string
+  }
+  console.log('picture ' + picture)
+  let name = ''
+  if (jwtClaims.name) {
+    name = jwtClaims.name as string
+  }
+  console.log('name ' + name)
+  let given_name = ''
+  if (jwtClaims.given_name) {
+    given_name = jwtClaims.given_name as string
+  }
+  console.log('given_name ' + given_name)
+  let family_name = ''
+  if (jwtClaims.family_name) {
+    family_name = jwtClaims.family_name as string
+  }
   const email_verified = jwtClaims.email_verified
   //console.log('email_verified ' + email_verified)
   const aud = first(jwtClaims.aud)!;
@@ -169,6 +188,10 @@ async function getZkLoginUser<T>(
     identifier: identifier.toBase64(),
     addressSeed: addressSeed,
     email: email as string,
+    picture: picture as string,
+    name: name as string,
+    given_name: given_name as string,
+    family_name: family_name as string,
     iss: iss,
     zkProof: { ...partialProof, addressSeed },
   };

@@ -203,7 +203,7 @@ export default function Index() {
             
             {/* {typeof(JSON.stringify(identifiers))} */}
             {/* {JSON.stringify(identifiers)} */}
-            {duplicate ? <p className="mt-5">Duplicate identifier + {user.identifier}</p> : null}
+            {duplicate ? <p className="mt-5 text-red-500">Duplicate identifier + {user.identifier}</p> : null}
             {used && used.length > 0 ? (
               used.map((use: any, index: any) => (
                 <p key={index} className="mt-5">Identifier: {use.identifier} Used By Address: {use.multisig_address}</p>
