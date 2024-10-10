@@ -12,6 +12,8 @@ CREATE TABLE "auth_recovery" (
     "index" INTEGER NOT NULL,
     "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "update_at" TIMESTAMP(3) NOT NULL,
+    "email" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "status" TEXT NOT NULL,
 
     CONSTRAINT "auth_recovery_pkey" PRIMARY KEY ("id")
@@ -22,8 +24,10 @@ CREATE TABLE "passkey_users" (
     "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "displayname" TEXT NOT NULL,
+    "multisig_address" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "status" TEXT NOT NULL,
 
     CONSTRAINT "passkey_users_pkey" PRIMARY KEY ("id")
 );
@@ -32,6 +36,7 @@ CREATE TABLE "passkey_users" (
 CREATE TABLE "passkey_credentials" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "multisig_address" TEXT NOT NULL,
     "name" TEXT,
     "externalId" TEXT NOT NULL,
     "publicKey" BYTEA NOT NULL,
@@ -47,9 +52,6 @@ CREATE UNIQUE INDEX "auth_recovery_identifier_status_key" ON "auth_recovery"("id
 
 -- CreateIndex
 CREATE UNIQUE INDEX "passkey_users_username_key" ON "passkey_users"("username");
-
--- CreateIndex
-CREATE UNIQUE INDEX "passkey_users_displayname_key" ON "passkey_users"("displayname");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "passkey_credentials_externalId_key" ON "passkey_credentials"("externalId");
