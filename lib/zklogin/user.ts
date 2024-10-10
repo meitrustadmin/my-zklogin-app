@@ -85,8 +85,6 @@ export const ZkLoginUser = object({
   email: string(),
   picture: string(),
   name: string(),
-  given_name: string(),
-  family_name: string(),
   zkProof: type({}),
 });
 export type ZkLoginUser<T = unknown> = Omit<

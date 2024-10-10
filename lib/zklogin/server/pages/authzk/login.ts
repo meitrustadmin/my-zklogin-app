@@ -108,6 +108,9 @@ async function getZkLoginUser<T>(
   if (jwtClaims.name) {
     name = jwtClaims.name as string
   }
+  if (jwtClaims.preferred_username) { 
+    name = jwtClaims.preferred_username as string
+  }
   console.log('name ' + name)
   let given_name = ''
   if (jwtClaims.given_name) {
@@ -190,8 +193,6 @@ async function getZkLoginUser<T>(
     email: email as string,
     picture: picture as string,
     name: name as string,
-    given_name: given_name as string,
-    family_name: family_name as string,
     iss: iss,
     zkProof: { ...partialProof, addressSeed },
   };

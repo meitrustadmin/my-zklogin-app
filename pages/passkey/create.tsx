@@ -182,7 +182,7 @@ function Create() {
       ) : (
         <p>Sorry, webauthn is not available.</p>
       )}
-      <Link href="/">Home</Link>
+      <Link href="/recover">Home</Link>
       <div>
           <button onClick={handleSignOut}>Sign out</button>
       </div>

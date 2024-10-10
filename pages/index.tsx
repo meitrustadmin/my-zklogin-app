@@ -200,34 +200,6 @@ export default function Index() {
           </Link>
         </div> */}
         <div>
-            
-            {/* {typeof(JSON.stringify(identifiers))} */}
-            {/* {JSON.stringify(identifiers)} */}
-            {duplicate ? <p className="mt-5 text-red-500">Duplicate identifier + {user.identifier}</p> : null}
-            {used && used.length > 0 ? (
-              used.map((use: any, index: any) => (
-                <p key={index} className="mt-5">Identifier: {use.identifier} Used By Address: {use.multisig_address}</p>
-              ))
-            ) : null}
-            {identifiers.length > 0 ? (
-              <ul>
-                {identifiers.map((identifier: any, index: any) => (
-                <>
-                 <li key={index}>
-                    <p>Provider: {identifier.provider}</p>
-                    <p>Identifier: {identifier.identifier}</p>
-                    <p>Address: {identifier.address}</p>
-                  </li>
-                  <button onClick={() => handleDelete(identifier.identifier)}>Delete</button>
-                </>
-                 
-                ))}
-              </ul>
-            ) : (
-              <p>No identifiers available</p>
-            )}
-        </div>
-        <div>
           Curent ZK Identifier: {JSON.stringify(user.identifier)}
         </div>
         <div>

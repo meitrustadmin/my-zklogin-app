@@ -78,7 +78,7 @@ export default withNewZkLoginSession(
                         "twitch", // Update if moved to another path
                         redirectTo,
                         ['user:read:email'],
-                        ['email', 'name', 'picture', 'given_name', 'family_name'],
+                        ['email', 'name', 'picture', 'preferred_username'],
                         true
                     ),
                     );
@@ -98,6 +98,7 @@ export default withNewZkLoginSession(
                         APPLE_CLIENT_ID!,
                         "apple", // Update if moved to another path
                         redirectTo,
+                        ['email', 'name'],
                     ),
                     );
                 }}

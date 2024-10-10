@@ -220,8 +220,8 @@ export default function Recover() {
                     <p>Picture: {identifier.picture}</p>
                     {/* <img src="https://lh3.googleusercontent.com/a/ACg8ocIv5Hkus7DuuncBhNULGJcbLuKGP82RYyH4FrHyjqq0NO6TmXs_=s96-c" width={100} height={100}/> */}
                     <p>Full Name: {identifier.name}</p>
-                    <p>Given Name: {identifier.given_name}</p>
-                    <p>Family Name: {identifier.family_name}</p>
+                    {/* <p>Given Name: {identifier.given_name}</p>
+                    <p>Family Name: {identifier.family_name}</p> */}
                     <p>Identifier: {identifier.identifier}</p>
                     <p>Address: {identifier.address}</p>
                   </li>
