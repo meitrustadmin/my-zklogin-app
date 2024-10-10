@@ -94,8 +94,11 @@ async function getZkLoginUser<T>(
     throw new ZkLoginAuthError("Invalid jwt nonce");
 
   const iss = jwtClaims.iss!;
-  const email = jwtClaims.email
-  //console.log('email ' + email)
+  let email = ''
+  if (jwtClaims.email) {
+    email = jwtClaims.email as string 
+  }
+  console.log('email ' + email)
   const email_verified = jwtClaims.email_verified
   //console.log('email_verified ' + email_verified)
   const aud = first(jwtClaims.aud)!;
