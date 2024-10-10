@@ -79,10 +79,12 @@ async function register(request: NextApiRequest) {
       username,
       displayname,
       multisig_address: multisigAddress,
+      status: 'ACTIVE',
       credentials: {
         create: {
           externalId: clean(binaryToBase64url(Buffer.from(credentialID))),
           publicKey: Buffer.from(credentialPublicKey),
+          multisig_address: multisigAddress,
         },
       },
     },
