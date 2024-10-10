@@ -20,7 +20,7 @@ const postHandler: NextApiHandler = (req, res) => {
     res.status(400).json({ error: error.message });
     return;
   }
-  console.log('in authzk apple ' + body)
+  console.log('in authzk apple ' + JSON.stringify(body))
 
   const callback = new URLSearchParams(body.state).get("callback");
   if (!callback) {
