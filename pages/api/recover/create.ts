@@ -1,11 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import  prisma  from 'lib/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withZkLoginUserRequired } from 'lib/zklogin/server/pages';
 import { sui } from 'lib/api/shinami';
 
-const prisma = new PrismaClient();
-
-
+// const prisma = new PrismaClient();
 
 
 export default withZkLoginUserRequired(sui, async function handler(
@@ -26,6 +24,8 @@ export default withZkLoginUserRequired(sui, async function handler(
           key_claim_value: m.keyClaimValue,
           wallet: m.address,
           multisig_address: req.body.msAddress,
+          email: m.email,
+          name: m.name,
           index: m.index,
           create_at: new Date(),
           update_at: new Date(),

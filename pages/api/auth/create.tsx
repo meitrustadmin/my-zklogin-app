@@ -43,7 +43,7 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
 async function register(request: NextApiRequest) {
   const challenge = request.body.challenge
   const credential = request.body.credential as PublicKeyCredentialWithAttestationJSON;
-  const { displayname, username } = request.body;
+  const { displayname, username, multisigAddress } = request.body;
 
   let verification: VerifiedRegistrationResponse;
 
@@ -78,6 +78,7 @@ async function register(request: NextApiRequest) {
     data: {
       username,
       displayname,
+      multisig_address: multisigAddress,
       credentials: {
         create: {
           externalId: clean(binaryToBase64url(Buffer.from(credentialID))),

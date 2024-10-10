@@ -69,7 +69,7 @@ async function getZkLoginUser<T>(
 ): Promise<ZkLoginUser<T>> {
   const [error, body] = validate(req.body, ZkLoginRequest);
   if (error) throw new ZkLoginAuthError(error.message);
-  console.log('jwt ' + JSON.stringify(body.jwt))
+  console.log('zklogin user body ' + JSON.stringify(body))
   const oidConfig = oidProviders[body.oidProvider];
 
   let jwtClaims;
@@ -164,13 +164,14 @@ async function getZkLoginUser<T>(
   ).toString();
 
   const identifier = toZkLoginPublicIdentifier(BigInt(addressSeed), iss);
-
-  const recoveries = await checkAuthRecoveryExists([identifier.toBase64()])
   let multisig_address = ''
-  if (recoveries.length === 1) {
-    multisig_address = recoveries[0].multisig_address
-  }
-  //console.log('in login ' + JSON.stringify(recoveries))
+  // const recoveries = await checkAuthRecoveryExists([identifier.toBase64()])
+  
+  // if (recoveries.length === 1) {
+  //   multisig_address = recoveries[0].multisig_address
+  // }
+  // console.log('in login ' + JSON.stringify(recoveries))
+  // console.log('multisig_address ' + multisig_address)
   const partialProof = await getZkProof(zkProofProvider, {
     jwt: body.jwt,
     ephemeralPublicKey: publicKeyFromBase64(body.extendedEphemeralPublicKey),
@@ -187,7 +188,6 @@ async function getZkLoginUser<T>(
     authContext,
     maxEpoch: body.maxEpoch,
     wallet,
-    multisig_address: multisig_address,
     identifier: identifier.toBase64(),
     addressSeed: addressSeed,
     email: email as string,

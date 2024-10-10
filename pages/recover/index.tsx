@@ -40,8 +40,6 @@ export default function Recover() {
                     email: user.email,
                     picture: user.picture,
                     name: user.name,
-                    given_name: user.given_name,
-                    family_name: user.family_name,
                     index: identifiers?.length || 0,
                 };
                 // Set the flag in sessionStorage
@@ -58,13 +56,15 @@ export default function Recover() {
                 const identifierExists = updatedIdentifiers.some(
                     (item: any) => item.identifier === newIdentifier.identifier
                 );
+                // TODO check if the identifier already exists in the database
                 if (identifierExists) {
                     setDuplicate(true);
                 } else {
                     updatedIdentifiers.push(newIdentifier);
+                    sessionStorage.setItem('identifiers', JSON.stringify(updatedIdentifiers));
+                    setIdentifiers(updatedIdentifiers);
                 }
-                sessionStorage.setItem('identifiers', JSON.stringify(updatedIdentifiers));
-                setIdentifiers(updatedIdentifiers);
+                
             }
         };
     }, [user]);

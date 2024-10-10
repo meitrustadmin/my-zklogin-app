@@ -20,6 +20,8 @@ model auth_recovery {
   index Int
   create_at DateTime @default(now())
   update_at DateTime
+  email String
+  name String
   status String
   @@unique([identifier, status], name: "unique_identifier")
 }
@@ -27,17 +29,19 @@ model auth_recovery {
 model passkey_users {
   id          String       @id @default(cuid())
   username    String       @unique
-  displayname String       @unique
+  displayname String       
+  multisig_address String
   credentials passkey_credentials[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  status String
 }
 
 model passkey_credentials {
   id     String  @id @default(cuid())
   user   passkey_users @relation(fields: [userId], references: [id])
   userId String
-
+  multisig_address String
   name       String?
   externalId String  @unique
   publicKey  Bytes   @unique

@@ -7,6 +7,8 @@ import { Keys } from 'types/index';
 
 export const keysAtom = atomWithStorage<Keys | undefined>('keys', undefined);
 
+export const multiSigAtom = atomWithStorage<string | undefined>('multisigAddress', undefined);
+
 export const identifiersAtom = atomWithStorage<any | null> (
     'identifiers',
     null,

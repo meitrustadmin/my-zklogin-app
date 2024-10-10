@@ -25,6 +25,8 @@ export default withNewZkLoginSession(
     //const redirectTo = first(router.query.redirectTo);
     const redirectTo = window.location.origin +'/recover'
 
+    // TODO useEffect to check if identifier facebook and twitch are already in the session storage
+
     // Render sign-in options based on what's configured.
     return (
       <>

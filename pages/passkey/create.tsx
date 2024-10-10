@@ -5,10 +5,12 @@ import { generateChallenge, isLoggedIn } from "lib/auth";
 import { sessionOptions } from "lib/session";
 import { useRouter } from "next/router";
 import { API_HOST, RPID } from "lib/api/move";
-import { withZkLoginSessionRequired } from "lib/zklogin/client";
+import { useZkLoginSession, withZkLoginSessionRequired } from "lib/zklogin/client";
 import { GetServerSideProps } from "next";
 import { AUTH_API_BASE } from "lib/zklogin/env";
 import Link from "next/link";
+import { useAtom } from "jotai";
+import { multiSigAtom } from "atoms";
 
 // export const getServerSideProps: GetServerSideProps = async (context: any) => {
 //   const challenge = generateChallenge();
@@ -38,7 +40,7 @@ import Link from "next/link";
 //   return { props: { challenge } };
 // }, sessionOptions);
 
-function Create() {
+function Create({ session } : { session: any }) {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [displayname, setDisplayname] = useState("");
@@ -46,6 +48,9 @@ function Create() {
   const [finished, setFinished] = useState(false);
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [challenge, setChallenge] = useState<string | null>(null);
+  const [passkeys, setPasskeys] = useState<any[]>([]);
+  const { user, isLoading, localSession } = session;
+  const [multisigAddress] = useAtom(multiSigAtom)
 
   useEffect(() => {
     const checkAvailability = async () => {
@@ -53,20 +58,37 @@ function Create() {
         await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
       setIsAvailable(available && supported());
     };
+    checkAvailability();
+  }, []);
+
+
+  useEffect(() => {
     const createChallenge = () => {
       const challenge = generateChallenge();
       sessionStorage.setItem("challenge", challenge);
       setChallenge(challenge);
     }
     createChallenge();
-    checkAvailability();
-  }, []);
-  
+  }, [])
+
+  // useEffect(() => {
+  //   const fetchPasskeys = async () => {
+  //     const response = await fetch('/api/passkey/getbyaddress', {
+  //       method: 'POST',
+  //       body: JSON.stringify({ multisigAddress }),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     console.log('passkeys', data);
+  //     setPasskeys(data);
+  //   };
+  //   fetchPasskeys();
+  // }, [multisigAddress]);
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-
-    
 
     // Check if username is already in use
     const usernameCheckResponse = await fetch("/api/auth/getbyusername", {
@@ -113,7 +135,7 @@ function Create() {
 
     const result = await fetch("/api/auth/create", {
       method: "POST",
-      body: JSON.stringify({ displayname, username, credential, challenge }),
+      body: JSON.stringify({ displayname, username, credential, challenge, multisigAddress }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -187,6 +209,13 @@ function Create() {
           <button onClick={handleSignOut}>Sign out</button>
       </div>
       {finished ? <p>Registration successful!</p> : null}
+      <div>
+        {passkeys.length > 0 && passkeys.map((passkey) => (
+          <div key={passkey.id}>
+            {passkey.username}
+          </div>
+        ))}
+      </div>
     </Fragment>
   );
 }

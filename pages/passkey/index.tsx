@@ -1,17 +1,19 @@
 import { withZkLoginSessionRequired } from "lib/zklogin/client/index";
 import { Fragment } from "react";
 import Link from "next/link";
+import { useAtom } from "jotai";
+import { multiSigAtom } from "atoms";
 
 
 export default withZkLoginSessionRequired(({ session } : {session: any}) => {
     const { isLoading, user, localSession } = session;
     if (isLoading) return <p>Loading zkLogin session...</p>;
+    const [multisigAddress] = useAtom(multiSigAtom)
     
     return (
         <Fragment>
-            <h1>Next.js Webauthn Demo</h1>
-            {JSON.stringify(user)}
-            {/* {JSON.stringify(localSession)} */}
+            <h1>Passkey</h1>
+            {multisigAddress}
             <ul>
             <li>
                 <Link href="/passkey/create">Create</Link>
