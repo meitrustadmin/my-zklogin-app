@@ -100,7 +100,7 @@ export default withNewZkLoginSession(
                         APPLE_CLIENT_ID!,
                         "apple", // Update if moved to another path
                         redirectTo,
-                        ['email', 'name'],
+                        ['email'],
                     ),
                     );
                 }}
