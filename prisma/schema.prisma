@@ -18,7 +18,7 @@ model apple_user {
   email      String?
   create_at  DateTime @default(now())
   update_at  DateTime @updatedAt
-  @@unique([iss, aud], name: "unique_iss_aud")
+  @@unique([iss, aud, sub], name: "unique_iss_aud_sub")
 }
 
 

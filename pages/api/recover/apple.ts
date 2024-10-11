@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const upsertedUser = await prisma.apple_user.upsert({
       where: {
-        unique_iss_aud: {
+        unique_iss_aud_sub: {
           iss,
           aud,
           sub,

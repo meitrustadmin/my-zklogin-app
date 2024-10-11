@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const user = await prisma.apple_user.findUnique({
       where: {
-        unique_iss_aud: {
+        unique_iss_aud_sub: {
           iss: iss as string,
           aud: aud as string,
           sub: sub as string,
