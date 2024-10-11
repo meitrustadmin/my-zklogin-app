@@ -35,6 +35,7 @@ import { sessionConfig } from "../session";
 import { methodDispatcher } from "../utils";
 import { hexToBytes } from '@noble/hashes/utils';
 import { checkAuthRecoveryExists } from "utils";
+import { API_HOST } from "lib/api/move";
 
 class ZkLoginAuthError extends Error {}
 
@@ -71,7 +72,7 @@ async function getZkLoginUser<T>(
   if (error) throw new ZkLoginAuthError(error.message);
   console.log('zklogin user body ' + JSON.stringify(body))
   const oidConfig = oidProviders[body.oidProvider];
-
+  console.log('oidConfig ' + JSON.stringify(oidConfig))
   let jwtClaims;
   try {
     jwtClaims = (
@@ -123,40 +124,40 @@ async function getZkLoginUser<T>(
     family_name = jwtClaims.family_name as string
   }
   // Call Apple API to get user
-  let appleUser;
-  if (body.oidProvider === 'apple') {
-    try {
-      const response = await fetch('/api/recover/apple/get', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          iss,
-          aud: jwtClaims.aud,
-          sub: jwtClaims.sub,
-        }),
-      });
+  // let appleUser;
+  // if (body.oidProvider === 'apple') {
+  //   try {
+  //     const response = await fetch(`${API_HOST}/api/recover/appleget`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         iss,
+  //         aud: jwtClaims.aud,
+  //         sub: jwtClaims.sub,
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Failed to get Apple user');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Failed to get Apple user');
+  //     }
 
-      appleUser = await response.json();
-      console.log('Apple user retrieved:', appleUser);
+  //     appleUser = await response.json();
+  //     console.log('Apple user retrieved:', appleUser);
 
-      // Update email and name if they were empty and are provided by Apple
-      if (!email && appleUser.email) {
-        email = appleUser.email;
-      }
-      if (!name && appleUser.name) {
-        name = appleUser.name;
-      }
-    } catch (error) {
-      console.error('Error getting Apple user:', error);
-      // You might want to handle this error more gracefully
-    }
-  }
+  //     // Update email and name if they were empty and are provided by Apple
+  //     if (!email && appleUser.email) {
+  //       email = appleUser.email;
+  //     }
+  //     if (!name && appleUser.name) {
+  //       name = appleUser.name;
+  //     }
+  //   } catch (error) {
+  //     console.error('Error getting Apple user:', error);
+  //     // You might want to handle this error more gracefully
+  //   }
+  // }
   const aud = first(jwtClaims.aud)!;
   const keyClaimValue = jwtClaims[body.keyClaimName] as string;
   const id: ZkLoginUserId = {

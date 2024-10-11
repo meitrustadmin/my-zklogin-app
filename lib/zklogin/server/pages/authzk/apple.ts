@@ -8,6 +8,7 @@ import { intersection, record, string, type, validate } from "superstruct";
 import { methodDispatcher } from "../utils";
 import { jwtVerify } from "jose";
 import { oidProviders } from "lib/zklogin/server/providers";
+import { API_HOST } from "lib/api/move";
 class ZkLoginAuthError extends Error {}
 const CallbackData = intersection([
   type({
@@ -25,51 +26,51 @@ const postHandler: NextApiHandler = async (req, res) => {
   console.log('in authzk apple ' + JSON.stringify(body.id_token))
 
   const oidConfig = oidProviders['apple'];
-
+  console.log('oidConfig ' + JSON.stringify(oidConfig))
   let jwtClaims;
   try {
     jwtClaims = (
       await jwtVerify(body.id_token, oidConfig.getKey, {
-        requiredClaims: ["iss", "aud", "nonce", body.keyClaimName],
+        requiredClaims: ["iss", "aud", "nonce", 'sub'],
       })
     ).payload;
   } catch (e) {
     throw new ZkLoginAuthError("Bad jwt");
   }
 
-  if (body.user) {
-    //TODO: store the user in the database
-    let user = JSON.parse(body.user);
-    console.log('user email ' + user.email)
-    console.log('user name ' + user.name)
-    try {
-      const response = await fetch('/api/recover/apple', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          iss: jwtClaims.iss,
-          aud: jwtClaims.aud,
-          sub: jwtClaims.sub,
-          name: user.name?.name,
-          first_name: user.name?.firstName,
-          given_name: user.name?.givenName,
-          email: user.email,
-        }),
-      });
+  // if (body.user) {
+  //   //TODO: store the user in the database
+  //   let user = JSON.parse(body.user);
+  //   console.log('user email ' + user.email)
+  //   console.log('user name ' + user.name)
+  //   try {
+  //     const response = await fetch(`${API_HOST}/api/recover/apple`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         iss: jwtClaims.iss,
+  //         aud: jwtClaims.aud,
+  //         sub: jwtClaims.sub,
+  //         name: user.name?.firstName + ' ' + user.name?.lastName,
+  //         first_name: user.name?.firstName,
+  //         given_name: user.name?.givenName,
+  //         email: user.email,
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Failed to upsert Apple user');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Failed to upsert Apple user');
+  //     }
 
-      const result = await response.json();
-      console.log('Apple user upserted:', result);
-    } catch (error) {
-      console.error('Error upserting Apple user:', error);
-      // You might want to handle this error more gracefully
-    }
-  }
+  //     const result = await response.json();
+  //     console.log('Apple user upserted:', result);
+  //   } catch (error) {
+  //     console.error('Error upserting Apple user:', error);
+  //     // You might want to handle this error more gracefully
+  //   }
+  // }
 
 
   const callback = new URLSearchParams(body.state).get("callback");
