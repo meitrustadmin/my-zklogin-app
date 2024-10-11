@@ -94,11 +94,12 @@ async function getZkLoginUser<T>(
     throw new ZkLoginAuthError("Invalid jwt nonce");
 
   const iss = jwtClaims.iss!;
+  //TODO: check if the apple, need to get user info from apple api
   let email = ''
   if (jwtClaims.email) {
     email = jwtClaims.email as string 
   }
-  console.log('email ' + email)
+  //console.log('email ' + email)
   let picture = 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'
   if (jwtClaims.picture) {
     picture = jwtClaims.picture as string

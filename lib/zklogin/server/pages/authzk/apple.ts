@@ -22,6 +22,13 @@ const postHandler: NextApiHandler = (req, res) => {
   }
   console.log('in authzk apple ' + JSON.stringify(body))
 
+  if (body.user) {
+    //TODO: store the user in the database
+    let user = JSON.parse(body.user);
+    console.log('user email ' + user.email)
+  }
+
+
   const callback = new URLSearchParams(body.state).get("callback");
   if (!callback) {
     res.status(400).json({ error: "Missing callback from state" });
