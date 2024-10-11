@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { iss, aud, name, first_name, given_name, email } = req.body;
+    const { iss, aud, sub, name, first_name, given_name, email } = req.body;
 
     if (!iss || !aud) {
       return res.status(400).json({ message: 'Missing required fields' });
@@ -22,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         unique_iss_aud: {
           iss,
           aud,
+          sub,
         },
       },
       update: {
@@ -34,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       create: {
         iss,
         aud,
+        sub,
         name,
         first_name,
         given_name,

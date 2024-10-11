@@ -10,9 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { iss, aud } = req.query;
+    const { iss, aud, sub } = req.query;
 
-    if (!iss || !aud) {
+    if (!iss || !aud || !sub) {
       return res.status(400).json({ message: 'Missing required query parameters' });
     }
 
@@ -21,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         unique_iss_aud: {
           iss: iss as string,
           aud: aud as string,
+          sub: sub as string,
         },
       },
     });

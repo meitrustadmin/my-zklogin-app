@@ -22,7 +22,7 @@ const postHandler: NextApiHandler = async (req, res) => {
     res.status(400).json({ error: error.message });
     return;
   }
-  console.log('in authzk apple ' + JSON.stringify(body))
+  console.log('in authzk apple ' + JSON.stringify(body.id_token))
 
   const oidConfig = oidProviders['apple'];
 
@@ -51,6 +51,7 @@ const postHandler: NextApiHandler = async (req, res) => {
         body: JSON.stringify({
           iss: jwtClaims.iss,
           aud: jwtClaims.aud,
+          sub: jwtClaims.sub,
           name: user.name?.name,
           first_name: user.name?.firstName,
           given_name: user.name?.givenName,

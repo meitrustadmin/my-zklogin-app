@@ -134,6 +134,7 @@ async function getZkLoginUser<T>(
         body: JSON.stringify({
           iss,
           aud: jwtClaims.aud,
+          sub: jwtClaims.sub,
         }),
       });
 
