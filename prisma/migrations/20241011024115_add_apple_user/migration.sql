@@ -1,4 +1,19 @@
 -- CreateTable
+CREATE TABLE "apple_user" (
+    "id" TEXT NOT NULL,
+    "iss" TEXT NOT NULL,
+    "aud" TEXT NOT NULL,
+    "name" TEXT,
+    "first_name" TEXT,
+    "given_name" TEXT,
+    "email" TEXT,
+    "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "update_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "apple_user_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "auth_recovery" (
     "id" TEXT NOT NULL,
     "provider" TEXT NOT NULL,
@@ -46,6 +61,9 @@ CREATE TABLE "passkey_credentials" (
 
     CONSTRAINT "passkey_credentials_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "apple_user_iss_aud_key" ON "apple_user"("iss", "aud");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "auth_recovery_identifier_status_key" ON "auth_recovery"("identifier", "status");

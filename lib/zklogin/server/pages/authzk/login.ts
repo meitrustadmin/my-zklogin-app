@@ -94,7 +94,7 @@ async function getZkLoginUser<T>(
     throw new ZkLoginAuthError("Invalid jwt nonce");
 
   const iss = jwtClaims.iss!;
-  //TODO: check if the apple, need to get user info from apple api
+  //TODO: check if the apple, need to get user is already in the database
   let email = ''
   if (jwtClaims.email) {
     email = jwtClaims.email as string 
@@ -122,8 +122,40 @@ async function getZkLoginUser<T>(
   if (jwtClaims.family_name) {
     family_name = jwtClaims.family_name as string
   }
-  const email_verified = jwtClaims.email_verified
-  //console.log('email_verified ' + email_verified)
+  // Call Apple API to get user
+  let appleUser;
+  if (body.oidProvider === 'apple') {
+    try {
+      const response = await fetch('/api/recover/apple/get', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          iss,
+          aud: jwtClaims.aud,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get Apple user');
+      }
+
+      appleUser = await response.json();
+      console.log('Apple user retrieved:', appleUser);
+
+      // Update email and name if they were empty and are provided by Apple
+      if (!email && appleUser.email) {
+        email = appleUser.email;
+      }
+      if (!name && appleUser.name) {
+        name = appleUser.name;
+      }
+    } catch (error) {
+      console.error('Error getting Apple user:', error);
+      // You might want to handle this error more gracefully
+    }
+  }
   const aud = first(jwtClaims.aud)!;
   const keyClaimValue = jwtClaims[body.keyClaimName] as string;
   const id: ZkLoginUserId = {

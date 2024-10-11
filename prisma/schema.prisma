@@ -7,6 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model apple_user {
+  id         String   @id @default(cuid())
+  iss        String
+  aud        String
+  name       String?
+  first_name String?
+  given_name String?
+  email      String?
+  create_at  DateTime @default(now())
+  update_at  DateTime @updatedAt
+  @@unique([iss, aud], name: "unique_iss_aud")
+}
+
+
 model auth_recovery {
   id String @id @default(cuid())
   provider String
