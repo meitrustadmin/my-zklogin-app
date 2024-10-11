@@ -26,10 +26,10 @@ const MultisigAddressProvider = (props: { children: React.ReactNode }) => {
 
         };
 
-       // fetchMultisigAddress();
+       fetchMultisigAddress();
     }, [user?.identifier]);
 
-    if (multisigAddress === undefined) return null; // Wait until we've checked for the multisig address
+    //if (multisigAddress === undefined) return null; // Wait until we've checked for the multisig address
 
     return <>{props.children}</>;
 }
