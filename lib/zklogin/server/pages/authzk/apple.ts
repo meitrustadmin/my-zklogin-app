@@ -29,7 +29,7 @@ const postHandler: NextApiHandler = async (req, res) => {
   let jwtClaims;
   try {
     jwtClaims = (
-      await jwtVerify(body.jwt, oidConfig.getKey, {
+      await jwtVerify(body.id_token, oidConfig.getKey, {
         requiredClaims: ["iss", "aud", "nonce", body.keyClaimName],
       })
     ).payload;
