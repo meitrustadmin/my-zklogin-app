@@ -42,6 +42,7 @@ export async function checkAuthRecoveryExists (identifiers: string[]) {
       }
       
       const data = await response.json();
+      //console.log('data ' + JSON.stringify(data))
       return data
   } catch (error) {
       console.error('Error checking auth recovery:', error);

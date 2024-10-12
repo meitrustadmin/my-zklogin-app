@@ -52,11 +52,16 @@ function Create({ session } : { session: any }) {
   const { user, isLoading, localSession } = session;
   const [multisigAddress] = useAtom(multiSigAtom)
 
+  console.log('user?.identifier ' + user?.identifier)
+  
+  console.log('multisigAddress ' + multisigAddress)
+
   useEffect(() => {
     const checkAvailability = async () => {
       const available =
         await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
       setIsAvailable(available && supported());
+      
     };
     checkAvailability();
   }, []);

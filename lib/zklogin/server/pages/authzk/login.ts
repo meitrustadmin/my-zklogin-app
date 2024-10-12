@@ -70,9 +70,9 @@ async function getZkLoginUser<T>(
 ): Promise<ZkLoginUser<T>> {
   const [error, body] = validate(req.body, ZkLoginRequest);
   if (error) throw new ZkLoginAuthError(error.message);
-  console.log('zklogin user body ' + JSON.stringify(body))
+  //console.log('zklogin user body ' + JSON.stringify(body))
   const oidConfig = oidProviders[body.oidProvider];
-  console.log('oidConfig ' + JSON.stringify(oidConfig))
+  //console.log('oidConfig ' + JSON.stringify(oidConfig))
   let jwtClaims;
   try {
     jwtClaims = (
@@ -105,7 +105,7 @@ async function getZkLoginUser<T>(
   if (jwtClaims.picture) {
     picture = jwtClaims.picture as string
   }
-  console.log('picture ' + picture)
+  //console.log('picture ' + picture)
   let name = ''
   if (jwtClaims.name) {
     name = jwtClaims.name as string
@@ -113,12 +113,12 @@ async function getZkLoginUser<T>(
   if (jwtClaims.preferred_username) { 
     name = jwtClaims.preferred_username as string
   }
-  console.log('name ' + name)
+ // console.log('name ' + name)
   let given_name = ''
   if (jwtClaims.given_name) {
     given_name = jwtClaims.given_name as string
   }
-  console.log('given_name ' + given_name)
+  //console.log('given_name ' + given_name)
   let family_name = ''
   if (jwtClaims.family_name) {
     family_name = jwtClaims.family_name as string

@@ -13,7 +13,7 @@ export default withZkLoginSessionRequired(({ session } : {session: any}) => {
     return (
         <Fragment>
             <h1>Passkey</h1>
-            {multisigAddress}
+            {multisigAddress && <p>Multisig Address: {multisigAddress}</p>}
             <ul>
             <li>
                 <Link href="/passkey/create">Create</Link>

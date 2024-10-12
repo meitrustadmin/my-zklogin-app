@@ -1,17 +1,17 @@
 import { throwExpression } from "../shared/utils";
 
-console.log('process.env.EXAMPLE_MOVE_PACKAGE_ID', JSON.stringify(process.env.EXAMPLE_MOVE_PACKAGE_ID))
+//console.log('process.env.EXAMPLE_MOVE_PACKAGE_ID', JSON.stringify(process.env.EXAMPLE_MOVE_PACKAGE_ID))
 export const EXAMPLE_MOVE_PACKAGE_ID = process.env.EXAMPLE_MOVE_PACKAGE_ID || '';
 if (!process.env.EXAMPLE_MOVE_PACKAGE_ID) {
   console.warn("Warning: EXAMPLE_MOVE_PACKAGE_ID is not set");
 }
-console.log('process.env.API_HOST ', JSON.stringify(process.env.API_HOST))
+//console.log('process.env.API_HOST ', JSON.stringify(process.env.API_HOST))
 export const API_HOST = process.env.API_HOST || '';
 if (!process.env.API_HOST) {
   console.warn("Warning: API_HOST is not set");
 }
 
-console.log('process.env.RPID ', JSON.stringify(process.env.RPID))
+//console.log('process.env.RPID ', JSON.stringify(process.env.RPID))
 
 export const RPID = process.env.RPID || '';
 if (!process.env.RPID) {
