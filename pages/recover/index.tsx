@@ -22,11 +22,22 @@ export default function Recover() {
   const [used, setUsed] = useState<any>(null);
   const router = useRouter();
 
+
+
     // add identifier to session storage
     useEffect(() => {
+      const storedIdentifiers = sessionStorage.getItem('identifiers');
+      if (storedIdentifiers) { 
+        const parsedIdentifiers = JSON.parse(storedIdentifiers);
+        if (parsedIdentifiers.length > 0) {
+          setIdentifiers(parsedIdentifiers)
+        }
+      }
+      //console.log('user ', JSON.stringify(user))
         if (user) {
         // Check if this is the first time loading the page
             const isFirstLoad = sessionStorage.getItem('isFirstLoad') === null;
+            console.log('isFirstLoad', isFirstLoad)
             if (isFirstLoad) {
                 const newIdentifier = {
                     provider: user.oidProvider,
@@ -64,27 +75,34 @@ export default function Recover() {
                     sessionStorage.setItem('identifiers', JSON.stringify(updatedIdentifiers));
                     setIdentifiers(updatedIdentifiers);
                 }
+
+                // const data = await checkAuthRecoveryExists(identifiersToSave)
+                // console.log('data', data)
+                // if (data && data.length > 0) {
+                //     setUsed(data)
+                //     return
+                // }
                 
             }
         };
     }, [user]);
   
 
-    useEffect(() => {
-        const loadIdentifiersFromSessionStorage = () => {
-            const storedIdentifiers = sessionStorage.getItem('identifiers');
-            if (storedIdentifiers) {
-            try {
-                const parsedIdentifiers = JSON.parse(storedIdentifiers);
-                setIdentifiers(parsedIdentifiers);
-            } catch (error) {
-                console.error('Error parsing identifiers from session storage:', error);
-            }
-            }
-        };
+    // useEffect(() => {
+    //     const loadIdentifiersFromSessionStorage = () => {
+    //         const storedIdentifiers = sessionStorage.getItem('identifiers');
+    //         if (storedIdentifiers) {
+    //         try {
+    //             const parsedIdentifiers = JSON.parse(storedIdentifiers);
+    //             setIdentifiers(parsedIdentifiers);
+    //         } catch (error) {
+    //             console.error('Error parsing identifiers from session storage:', error);
+    //         }
+    //         }
+    //     };
 
-        loadIdentifiersFromSessionStorage();
-    }, []);
+    //     loadIdentifiersFromSessionStorage();
+    // }, []);
 
     const handleAdd = () => {
         sessionStorage.removeItem('isFirstLoad');
@@ -114,14 +132,19 @@ export default function Recover() {
     async function toMultisigAddress(): Promise<void> {
         let pks: { publicKey: PublicKey; weight: number }[] = [];
         let identifiersToSave: string[] = []
-        identifiers.map(i => identifiersToSave.push(i.identifier))
+        const storedIdentifiers = sessionStorage.getItem('identifiers');
+        if (storedIdentifiers) {
+          identifiersToSave = JSON.parse(storedIdentifiers);
+          //storedIdentifiers.map(i => identifiersToSave.push(i.identifier))
+        }
+        
         const data = await checkAuthRecoveryExists(identifiersToSave)
         console.log('data', data)
         if (data && data.length > 0) {
             setUsed(data)
             return
         }
-        identifiers.forEach((item: any) => {
+        identifiersToSave.forEach((item: any) => {
             let pk = toZkLoginPublicIdentifier(
                 BigInt(item.addressSeed),
                 item.iss,
@@ -136,19 +159,23 @@ export default function Recover() {
         });
         //console.log(multiSigPublicKey.toSuiAddress());
         //user?.multisigAddress = multiSigPublicKey.toSuiAddress();setMsAddress
+        console.log('multiSigPublicKey raw bytes', multiSigPublicKey.toRawBytes());
+
+        const msAddressRawBase64 = btoa(String.fromCharCode.apply(null, Array.from(multiSigPublicKey.toRawBytes())));
+
         setMsAddress(multiSigPublicKey.toSuiAddress());
         try {
-        const response = await fetch('/api/recover/create', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({identifiers: identifiers, msAddress: multiSigPublicKey.toSuiAddress()})
-        });
+            const response = await fetch('/api/recover/create', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({identifiers: identifiers, msAddress: multiSigPublicKey.toSuiAddress(), msAddressRaw: msAddressRawBase64})
+            });
 
-        if (!response.ok) {
-            throw new Error('Failed to create recovery');
-        }
+            if (!response.ok) {
+                throw new Error('Failed to create recovery');
+            }
 
             const result = await response.json();
             setIdentifiers([]);
@@ -193,7 +220,13 @@ export default function Recover() {
     // Signed-in experience.
     return (
     <>
-        <h1>Hello, {user.oidProvider} user!</h1>
+        <h3>
+          New added account provider: {user.oidProvider}
+        </h3>
+        <h3>
+          New added account ZK Identifier: {JSON.stringify(user.identifier)}
+        </h3>
+        
         {/* <div>
           <Link href={getSuiVisionAccountUrl(user.wallet)} target="_blank">
             My zkLogin wallet address
@@ -203,7 +236,7 @@ export default function Recover() {
             
             {/* {typeof(JSON.stringify(identifiers))} */}
             {/* {JSON.stringify(identifiers)} */}
-            {duplicate ? <h3 className="mt-5 text-red-500">{user.email} already added</h3> : null}
+            {duplicate ? <h3 className="mt-5 text-red-500">{user.oidProvider} {user.email} already added</h3> : null}
             {used && used.length > 0 ? (
               used.map((use: any, index: any) => (
                 <p key={index} className="mt-5">Identifier: {use.identifier} Used By Address: {use.multisig_address}</p>
@@ -233,9 +266,6 @@ export default function Recover() {
             ) : (
               <p>No identifiers available</p>
             )}
-        </div>
-        <div>
-          Curent ZK Identifier: {JSON.stringify(user.identifier)}
         </div>
         <div>
           Multisig Address: {msAddress}
@@ -271,16 +301,45 @@ export default function Recover() {
     </>
     );
   } else {
-    // Anonymous experience.
-    return (
-      <>
-        <h1>Hello, anonymous user!</h1>
-        <div>
-          <Link href={LOGIN_PAGE_PATH}>Continue with social account</Link>
-        </div>
-        
-      </>
-    );
+
+    if (identifiers.length > 0) {
+      return (
+        <>
+          <ul>
+              {identifiers.map((identifier: any, index: any) => (
+              <>
+              <li key={index}>
+                  <p>Provider: {identifier.provider}</p>
+                  <p>Email: {identifier.email}</p>
+                  {/* {identifier.picture && <img src={identifier.picture} width={100} height={100} className="rounded-full"/>} */}
+                  <p>Picture: {identifier.picture}</p>
+                  {/* <img src="https://lh3.googleusercontent.com/a/ACg8ocIv5Hkus7DuuncBhNULGJcbLuKGP82RYyH4FrHyjqq0NO6TmXs_=s96-c" width={100} height={100}/> */}
+                  <p>Full Name: {identifier.name}</p>
+                  {/* <p>Given Name: {identifier.given_name}</p>
+                  <p>Family Name: {identifier.family_name}</p> */}
+                  <p>Identifier: {identifier.identifier}</p>
+                  <p>Address: {identifier.address}</p>
+                </li>
+                <button onClick={() => handleDelete(identifier.identifier)}>Delete</button>
+              </>
+              ))}
+          </ul>
+          <div>
+              <button onClick={handleAdd}>Add recovery</button>
+          </div>
+        </>) 
+      } else {
+        return (
+          <>
+            <h1>Hello, anonymous user!</h1>
+            <div>
+              <Link href={LOGIN_PAGE_PATH}>Continue with social account</Link>
+            </div>
+            
+          </>
+        );
+      }
+
   }
 }
 
