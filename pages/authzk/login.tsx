@@ -50,7 +50,7 @@ export default withNewZkLoginSession(
                 </button>
             </div>
         )}
-        {/* {FACEBOOK_CLIENT_ID && (
+        {FACEBOOK_CLIENT_ID && (
             <div>
                 <button
                 onClick={() => {
@@ -68,7 +68,7 @@ export default withNewZkLoginSession(
                 Sign in with Facebook
                 </button>
             </div>
-        )} */}
+        )}
         {TWITCH_CLIENT_ID && (
             <div>
                 <button
