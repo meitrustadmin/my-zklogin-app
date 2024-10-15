@@ -132,12 +132,12 @@ export default function Recover() {
     async function toMultisigAddress(): Promise<void> {
         let pks: { publicKey: PublicKey; weight: number }[] = [];
         let identifiersToSave: string[] = []
-        const storedIdentifiers = sessionStorage.getItem('identifiers');
-        if (storedIdentifiers) {
-          identifiersToSave = JSON.parse(storedIdentifiers);
-          //storedIdentifiers.map(i => identifiersToSave.push(i.identifier))
-        }
-        
+        identifiers.map(i => identifiersToSave.push(i.identifier))
+        // const storedIdentifiers = sessionStorage.getItem('identifiers');
+        // if (storedIdentifiers) {
+        //   identifiersToSave = JSON.parse(storedIdentifiers);
+        //   //storedIdentifiers.map(i => identifiersToSave.push(i.identifier))
+        // }
         const data = await checkAuthRecoveryExists(identifiersToSave)
         console.log('data', data)
         if (data && data.length > 0) {
@@ -189,16 +189,16 @@ export default function Recover() {
     }
 
     const handleDelete = (identifierToDelete: string) => {
-        console.log('identifierToDelete', identifierToDelete);
+        //console.log('identifierToDelete', identifierToDelete);
         const storedIdentifiers = sessionStorage.getItem('identifiers');
-        console.log('storedIdentifiers before deletion:', storedIdentifiers);
+        //console.log('storedIdentifiers before deletion:', storedIdentifiers);
         
         if (storedIdentifiers) {
             let updatedIdentifiers = JSON.parse(storedIdentifiers);
-            console.log('updatedIdentifiers before deletion:', updatedIdentifiers);
+            //console.log('updatedIdentifiers before deletion:', updatedIdentifiers);
             
             updatedIdentifiers = updatedIdentifiers.filter((item: any) => item.identifier !== identifierToDelete);
-            console.log('updatedIdentifiers after deletion:', updatedIdentifiers);
+            //console.log('updatedIdentifiers after deletion:', updatedIdentifiers);
             
             sessionStorage.setItem('identifiers', JSON.stringify(updatedIdentifiers));
             setIdentifiers(updatedIdentifiers);
