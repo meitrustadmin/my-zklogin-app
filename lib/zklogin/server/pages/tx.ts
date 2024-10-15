@@ -75,9 +75,10 @@ function sponsoredTxHandler<TAuth = unknown>(
 
       const { txBytes, signature } = await gas.sponsorTransaction({
         ...tx,
-        sender: user.wallet,
+        //sender: user.wallet,
+        sender: req.body.multisigAddress,
       });
-      res.json({ txBytes, gasSignature: signature, multisigAddress: req.body.multisigAddress });
+      res.json({ txBytes, gasSignature: signature });
     },
   });
 }
@@ -109,7 +110,6 @@ function execHandler<TAuth = unknown, TRes = unknown>(
       });
       if (response.length > 0) { 
         let multisigAddressRaw = response[0].multisig_address_raw
-        console.log("req.body.multisigAddress", multisigAddressRaw)
         const multiSigPublicKey = new MultiSigPublicKey(base64ToUint8Array(multisigAddressRaw))
 
         const suiAddres = multiSigPublicKey.toSuiAddress();
@@ -120,76 +120,12 @@ function execHandler<TAuth = unknown, TRes = unknown>(
 
      
 
-        
-      // MultiSigPublicKey.fromPublicKeys({
-      //   threshold: 1,
-      //   publicKeys: [
-      //     { publicKey: response[0].identifier, weight: 1 },
-      //     { publicKey: response[1].identifier, weight: 1 },
-      //   ],
-      // });
-      // if (response.length > 0) {
-      //   const multiSigPublicKey = MultiSigPublicKey.fromPublicKeys({
-      //     threshold: 1,
-      //     publicKeys: [
-      //       { publicKey: response[0].identifier, weight: 1 },
-      //       { publicKey: response[1].identifier, weight: 1 },
-      //     ],
-      //   });
-      // }
-      //const recoveries = json(response);
-     // console.log( "multi address ", suiAddres);
-      // console.log(recoveries);
-
-      // const response = await fetch(`${process.env.API_HOST}/api/recover/getbymultisig`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ multisigAddress: req.body.multisigAddress }),
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error(`Failed to fetch passkey users: ${response.statusText}`);
-      // }
-
-
-
-      // Assuming the first passkey in the array contains the required public keys
-      // if (passkeys.length === 0) {
-      //   throw new Error('No passkey users found for this multisig address');
-      // }
-
-      // const pkSingle = passkeys[0].pk_single;
-      // const pkZklogin = passkeys[0].pk_zklogin;
-
-      // if (!pkSingle || !pkZklogin) {
-      //   throw new Error('Missing required public keys in passkey data');
-      // }
-
-      // const multiSigPublicKey = MultiSigPublicKey.fromPublicKeys({
-      //   threshold: 1,
-      //   publicKeys: [
-      //     { publicKey: pkSingle, weight: 1 },
-      //     { publicKey: pkZklogin, weight: 1 },
-      //   ],
-      // });
-
-      //const multisig = multiSigPublicKey.combinePartialSignatures([zkSignature]);
-
-      // const txRes = await sui.executeTransactionBlock({
-      //   transactionBlock: body.txBytes,
-      //   signature: body.gasSignature
-      //     ? [multiSig!, body.gasSignature]
-      //     : multiSig!,
-      //   options: { ...txOptions, showEffects: true },
-      // });
-
       const txRes = await sui.executeTransactionBlock({
         transactionBlock: body.txBytes,
         signature: body.gasSignature
           ? [multiSig!, body.gasSignature]
           : multiSig!,
+       // signature: [multiSig!, body.gasSignature!],
         options: { ...txOptions, showEffects: true },
       });
 

@@ -10,6 +10,7 @@ import {
   zkLoginSponsoredTxExecHandler,
 } from "lib/zklogin/server/pages";
 import { mask, validate } from "superstruct";
+import { Transaction } from '@mysten/sui/transactions';
 
 
 /**
@@ -22,18 +23,15 @@ const buildTx: GaslessTransactionBuilder = async (req, { wallet }) => {
   console.log("Preparing add tx for zkLogin address", req.body.multisigAddress);
 
   return await buildGaslessTransaction((txb) => {
+
     txb.setSender(req.body.multisigAddress)
-    console.log("txb.setSender", req.body.multisigAddress);
+    //console.log("txb.setSender", req.body.multisigAddress);
     // Source code for this example Move function:
     // https://github.com/shinamicorp/shinami-typescript-sdk/blob/90f19396df9baadd71704a0c752f759c8e7088b4/move_example/sources/math.move#L13
     txb.moveCall({
       target: `${EXAMPLE_MOVE_PACKAGE_ID}::math::add`,
       arguments: [txb.pure.u64(body.x), txb.pure.u64(body.y)],
     });
-
-    // Optionally, you can set gas budget and price here or in options.
-    // txb.setGasBudget(5_000_000);
-    // txb.setGasPrice(1_000);
   });
 };
 
