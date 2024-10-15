@@ -144,7 +144,7 @@ export default function Recover() {
             setUsed(data)
             return
         }
-        identifiersToSave.forEach((item: any) => {
+        identifiers.forEach((item: any) => {
             let pk = toZkLoginPublicIdentifier(
                 BigInt(item.addressSeed),
                 item.iss,
