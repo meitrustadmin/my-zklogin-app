@@ -55,6 +55,7 @@ export function withZkLoginUserRequired<TRes, TAuth = unknown>(
 ): NextApiHandler<TRes | ApiErrorBody> {
   return withInternalErrorHandler(
     withSession<TRes | ApiErrorBody>(async (req, res) => {
+     // console.log("req.session ", req.session);
       if (!req.session.user)
         return res.status(401).json({ error: "Unauthorized" });
 

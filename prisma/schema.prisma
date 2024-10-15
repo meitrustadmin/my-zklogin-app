@@ -32,6 +32,7 @@ model auth_recovery {
   key_claim_value String
   wallet String
   multisig_address String
+  multisig_address_raw String
   index Int
   create_at DateTime @default(now())
   update_at DateTime

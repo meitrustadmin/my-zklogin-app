@@ -3,6 +3,7 @@ import { Infer, array, coerce, integer, object, string } from "superstruct";
 export const AddRequest = object({
   x: integer(),
   y: integer(),
+  multisigAddress: string(),
 });
 export type AddRequest = Infer<typeof AddRequest>;
 

@@ -25,6 +25,7 @@ CREATE TABLE "auth_recovery" (
     "key_claim_value" TEXT NOT NULL,
     "wallet" TEXT NOT NULL,
     "multisig_address" TEXT NOT NULL,
+    "multisig_address_raw" TEXT NOT NULL,
     "index" INTEGER NOT NULL,
     "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "update_at" TIMESTAMP(3) NOT NULL,

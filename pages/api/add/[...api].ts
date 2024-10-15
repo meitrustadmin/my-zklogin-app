@@ -19,10 +19,11 @@ const buildTx: GaslessTransactionBuilder = async (req, { wallet }) => {
   const [error, body] = validate(req.body, AddRequest);
   if (error) throw new InvalidRequest(error.message);
 
-  console.log("Preparing add tx for zkLogin wallet", wallet);
+  console.log("Preparing add tx for zkLogin address", req.body.multisigAddress);
 
   return await buildGaslessTransaction((txb) => {
-    //txb.setSender(multisig_address)
+    txb.setSender(req.body.multisigAddress)
+    console.log("txb.setSender", req.body.multisigAddress);
     // Source code for this example Move function:
     // https://github.com/shinamicorp/shinami-typescript-sdk/blob/90f19396df9baadd71704a0c752f759c8e7088b4/move_example/sources/math.move#L13
     txb.moveCall({

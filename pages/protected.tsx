@@ -1,3 +1,5 @@
+import { multiSigAtom } from "atoms";
+import { useAtomValue } from "jotai";
 import { useAddMutation, useRecentTxsQuery } from "lib/hooks/api";
 import { getSuiVisionTransactionUrl } from "lib/hooks/sui";
 import { AddResponse } from "lib/shared/interfaces";
@@ -11,12 +13,14 @@ export default withZkLoginSessionRequired(({ session }) => {
   const [result, setResult] = useState<AddResponse>();
   const { mutateAsync: add, isPending: isAdding } = useAddMutation();
   const { data: txs, isLoading: isLoadingTxs } = useRecentTxsQuery();
+  const multisigAddress = useAtomValue(multiSigAtom);
 
   if (isLoading) return <p>Loading zkLogin session...</p>;
 
   return (
     <>
       <h1>Hello, {user.oidProvider} user!</h1>
+      {multisigAddress && <p>Multisig Address: {multisigAddress}</p>}
       <div>
         <form
           onSubmit={(e) => {
@@ -31,6 +35,7 @@ export default withZkLoginSessionRequired(({ session }) => {
               const result = await add({
                 x,
                 y,
+                multisigAddress: multisigAddress as string,
                 keyPair: localSession.ephemeralKeyPair,
               });
               setResult(result);

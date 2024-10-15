@@ -1,6 +1,7 @@
 import {
   ApiError,
   WithKeyPair,
+  WithMultisigAddress,
   apiTxExecMutationFn,
 } from "lib/zklogin/client";
 import {
@@ -27,7 +28,7 @@ import {
 export function useAddMutation(): UseMutationResult<
   AddResponse,
   ApiError,
-  AddRequest & WithKeyPair
+  AddRequest & WithKeyPair & WithMultisigAddress
 > {
   const qc = useQueryClient();
   return useMutation({

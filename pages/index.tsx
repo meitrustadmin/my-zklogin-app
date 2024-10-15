@@ -30,6 +30,13 @@ export default function Index() {
 
     // add identifier to session storage
     useEffect(() => {
+      const storedIdentifiers = sessionStorage.getItem('identifiers');
+      if (storedIdentifiers) { 
+        const parsedIdentifiers = JSON.parse(storedIdentifiers);
+        if (parsedIdentifiers.length > 0) {
+          setIdentifiers(parsedIdentifiers)
+        }
+      }
         if (user) {
         // Check if this is the first time loading the page
             const isFirstLoad = sessionStorage.getItem('isFirstLoad') === null;
@@ -88,7 +95,7 @@ export default function Index() {
     }, []);
   const handleAdd = () => {
     sessionStorage.removeItem('isFirstLoad');
-    router.push('/recover')
+    router.push('/authzk/login')
   }
     const checkAuthRecoveryExists = async (identifiers: string[]) => {
         try {
@@ -200,11 +207,36 @@ export default function Index() {
           </Link>
         </div> */}
         <div>
-          Curent ZK Identifier: {JSON.stringify(user.identifier)}
+          Current provider: {user.oidProvider}
+          Curent ZK Identifier: {user.identifier}
         </div>
         <div>
           Multisig Address: {msAddress}
         </div>
+        {identifiers.length > 0 ? (
+              <ul>
+                {identifiers.map((identifier: any, index: any) => (
+                <>
+                 <li key={index}>
+                    <p>Provider: {identifier.provider}</p>
+                    <p>Email: {identifier.email}</p>
+                    {/* {identifier.picture && <img src={identifier.picture} width={100} height={100} className="rounded-full"/>} */}
+                    <p>Picture: {identifier.picture}</p>
+                    {/* <img src="https://lh3.googleusercontent.com/a/ACg8ocIv5Hkus7DuuncBhNULGJcbLuKGP82RYyH4FrHyjqq0NO6TmXs_=s96-c" width={100} height={100}/> */}
+                    <p>Full Name: {identifier.name}</p>
+                    {/* <p>Given Name: {identifier.given_name}</p>
+                    <p>Family Name: {identifier.family_name}</p> */}
+                    <p>Identifier: {identifier.identifier}</p>
+                    <p>Address: {identifier.address}</p>
+                  </li>
+                  <button onClick={() => handleDelete(identifier.identifier)}>Delete</button>
+                </>
+                 
+                ))}
+              </ul>
+            ) : (
+              <p>No identifiers available</p>
+            )}
         <div>
             <button onClick={handleAdd}>Add recovery</button>
         </div>

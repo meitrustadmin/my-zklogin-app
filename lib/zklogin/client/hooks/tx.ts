@@ -14,6 +14,10 @@ export interface WithKeyPair {
   keyPair: Keypair;
 }
 
+export interface WithMultisigAddress {  
+  multisigAddress: string;
+}
+
 /**
  * Helper function to generate TanStack mutation functions for end-to-end Sui transaction block
  * execution.
@@ -24,6 +28,7 @@ export interface WithKeyPair {
 export function apiTxExecMutationFn<
   T = unknown,
   P extends WithKeyPair = WithKeyPair,
+  Q extends WithMultisigAddress = WithMultisigAddress,
 >({
   baseUri,
   body,
