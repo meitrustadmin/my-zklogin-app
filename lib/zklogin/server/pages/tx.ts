@@ -110,6 +110,7 @@ function execHandler<TAuth = unknown, TRes = unknown>(
       });
       if (response.length > 0) { 
         let multisigAddressRaw = response[0].multisig_address_raw
+        console.log("multisigAddressRaw", multisigAddressRaw)
         const multiSigPublicKey = new MultiSigPublicKey(base64ToUint8Array(multisigAddressRaw))
 
         const suiAddres = multiSigPublicKey.toSuiAddress();

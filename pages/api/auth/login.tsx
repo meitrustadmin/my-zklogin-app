@@ -96,7 +96,7 @@ async function login(request: NextApiRequest) {
   //   throw new Error("Login verification failed");
   // }
 
-  console.log(`Logged in as user ${userCredential.userId}`);
+  //console.log(`Logged in as user ${userCredential.userId}`);
   return userCredential.userId;
 }
 
