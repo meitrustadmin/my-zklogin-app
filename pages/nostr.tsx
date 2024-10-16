@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { generatePrivateKey, getPublicKey } from "nostr-tools";
 import OtpInput from 'react-otp-input';
+import { useRouter } from "next/router";
 
 export default function Nostr() {
 
@@ -15,6 +16,7 @@ export default function Nostr() {
   const [encryptedPrivateKey, setEncryptedPrivateKey] = useState<string | null>(null);
   const [iv, setIv] = useState<string | null>(null);
   const [decryptedPrivateKey, setDecryptedPrivateKey] = useState<string | null>(null);
+  const router = useRouter();
 
 //   useEffect(() => {
 //     const privateKey = generatePrivateKey();
@@ -189,6 +191,7 @@ export default function Nostr() {
                 <h3>Decrypted Private Key: {decryptedPrivateKey}</h3>
             </div>
         )}
+        <button onClick={() => router.push('/passkey/verify')}>Next</button>
     </div>
   );
 }   
