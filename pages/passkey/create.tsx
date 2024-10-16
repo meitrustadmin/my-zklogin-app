@@ -52,9 +52,9 @@ function Create({ session } : { session: any }) {
   const { user, isLoading, localSession } = session;
   const [multisigAddress] = useAtom(multiSigAtom)
 
-  console.log('user?.identifier ' + user?.identifier)
+  // console.log('user?.identifier ' + user?.identifier)
   
-  console.log('multisigAddress ' + multisigAddress)
+  // console.log('multisigAddress ' + multisigAddress)
 
   useEffect(() => {
     const checkAvailability = async () => {
@@ -76,21 +76,21 @@ function Create({ session } : { session: any }) {
     createChallenge();
   }, [])
 
-  // useEffect(() => {
-  //   const fetchPasskeys = async () => {
-  //     const response = await fetch('/api/passkey/getbyaddress', {
-  //       method: 'POST',
-  //       body: JSON.stringify({ multisigAddress }),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-  //     const data = await response.json();
-  //     console.log('passkeys', data);
-  //     setPasskeys(data);
-  //   };
-  //   fetchPasskeys();
-  // }, [multisigAddress]);
+  useEffect(() => {
+    const fetchPasskeys = async () => {
+      const response = await fetch('/api/passkey/getbyaddress', {
+        method: 'POST',
+        body: JSON.stringify({ multisigAddress }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      console.log('passkeys', data);
+      setPasskeys(data);
+    };
+    fetchPasskeys();
+  }, []);
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -145,9 +145,12 @@ function Create({ session } : { session: any }) {
         "Content-Type": "application/json",
       },
     });
-    console.log('result', result);
+    //console.log('result', result);
+    const data = await result.json();
+    console.log('data', data);
     if (result.ok) {
-      setFinished(true);
+      //setFinished(true);
+      window.location.href = '/nostr';
       // Get WebAuthn credentials list
       
       // const credentialsList = await navigator.credentials.get({
@@ -178,6 +181,18 @@ function Create({ session } : { session: any }) {
   return (
     <Fragment>
       <h1>Create Passkey</h1>
+      <p>Multisig Address: {multisigAddress}</p>
+      <ul>
+      <h3>Passkeys List in DB</h3>
+      {passkeys.length > 0 ? passkeys.map((passkey) => (
+        <li key={passkey.id} className="flex flex-row">
+          <div className="px-5">id: {passkey.id}</div>
+          <div className="px-5">username: {passkey.username}</div>
+          <div className="px-5">displayname: {passkey.displayname}</div>
+        </li>
+      )) : <p>No passkeys found</p>}
+      </ul>
+
       {isAvailable ? (
         <form method="POST" onSubmit={onSubmit}>
           <input
@@ -203,24 +218,28 @@ function Create({ session } : { session: any }) {
               setFinished(false)
               setError('')}}
           />
-          <input type="submit" value="Register" />
+          <input type="submit" value="Create Passkey" />
           {error != null ? <pre>{error}</pre> : null}
         </form>
       ) : (
         <p>Sorry, webauthn is not available.</p>
       )}
-      <Link href="/recover">Home</Link>
+        <div>
+          <Link href="/passkey/verify">Next</Link>
+        </div>
+      
       <div>
           <button onClick={handleSignOut}>Sign out</button>
       </div>
       {finished ? <p>Registration successful!</p> : null}
-      <div>
+      <Link href="/recover">Back To Home</Link>
+      {/* <div>
         {passkeys.length > 0 && passkeys.map((passkey) => (
           <div key={passkey.id}>
             {passkey.username}
           </div>
         ))}
-      </div>
+      </div> */}
     </Fragment>
   );
 }

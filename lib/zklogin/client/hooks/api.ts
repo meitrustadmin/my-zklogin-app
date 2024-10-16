@@ -52,7 +52,7 @@ export async function callJsonApi<T>({
     },
     body: JSON.stringify(body),
   });
-  console.log("uri ", JSON.stringify(uri));
+  //console.log("uri ", JSON.stringify(uri));
   const data: unknown = await resp.json();
   if (!resp.ok) {
     throw new ApiError(

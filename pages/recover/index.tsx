@@ -7,12 +7,11 @@ import { toZkLoginPublicIdentifier } from '@mysten/sui/zklogin';
 import { MultiSigPublicKey } from '@mysten/sui/multisig';
 import {PublicKey, SignatureScheme, decodeSuiPrivateKey } from '@mysten/sui/cryptography';
 import { useRouter } from "next/router";
-import { useZkLoginSession, useSaveZkLoginLocalSession } from "lib/zklogin/client/hooks/session";
+import { withZkLoginSessionRequired } from "lib/zklogin/client";
 
 
 // This is a publically accessible page, displaying optional contents for signed-in users.
-export default function Recover() {
-  const session = useZkLoginSession();
+export default withZkLoginSessionRequired( ({session} : {session: any}) => {
   const { user , isLoading } : { user: any, isLoading: boolean } = session;
   //const [identifiers, setIdentifiers] = useAtom(identifiersAtom);
   const [identifiers, setIdentifiers] = useState<any[]>([]);
@@ -37,7 +36,7 @@ export default function Recover() {
         if (user) {
         // Check if this is the first time loading the page
             const isFirstLoad = sessionStorage.getItem('isFirstLoad') === null;
-            console.log('isFirstLoad', isFirstLoad)
+            //console.log('isFirstLoad', isFirstLoad)
             if (isFirstLoad) {
                 const newIdentifier = {
                     provider: user.oidProvider,
@@ -221,10 +220,10 @@ export default function Recover() {
     return (
     <>
         <h3>
-          New added account provider: {user.oidProvider}
+          current session provider: {user.oidProvider}
         </h3>
         <h3>
-          New added account ZK Identifier: {JSON.stringify(user.identifier)}
+          current session identifier: {JSON.stringify(user.identifier)}
         </h3>
         
         {/* <div>
@@ -270,34 +269,33 @@ export default function Recover() {
         <div>
           Multisig Address: {msAddress}
         </div>
-        <div>
-            <button onClick={handleAdd}>Add recovery</button>
-        </div>
-        {/* {showRecover && (
+        <div className="flex flex-1 flex-row gap-x-2" >
           <div>
-            <Recover/>
+              <button onClick={handleAdd}>Add recovery</button>
           </div>
-        )} */}
-        { identifiers.length < 3 ? 
-          (<div>
-            <button disabled>To multisig disable</button>
-          </div>): (<div>
-            <button onClick={toMultisigAddress}>To multisig</button>
-          </div>)
-        }
+          { identifiers.length < 3 ? 
+            (<div>
+              <button disabled>To multisig disable</button>
+            </div>): (<div>
+              <button onClick={toMultisigAddress}>To multisig</button>
+            </div>)
+          }
+        </div>
+
         {/* <div>
           <Link href={RECOVER_PAGE_PATH}>Recover</Link>
         </div> */}
-        <div>
+        {/* <div>
           <Link href="/protected">Sui calculator</Link>
+        </div> */}
+         <div>
+          <button onClick={() => router.push('/passkey/create')}>Passkey</button>
         </div>
         <div>
           {/* <Link href={`${AUTH_API_BASE}/logout`}>Sign out</Link> */}
           <button onClick={handleSignOut}>Sign out</button>
         </div>
-        <div>
-          <Link href="/passkey/create">Create passkey</Link>
-        </div>
+       
     </>
     );
   } else {
@@ -341,6 +339,6 @@ export default function Recover() {
       }
 
   }
-}
+})
 
 
