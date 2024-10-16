@@ -4,19 +4,34 @@ import { generatePrivateKey, getPublicKey } from "nostr-tools";
 import OtpInput from 'react-otp-input';
 
 export default function Nostr() {
-  useEffect(() => {
-    //const nostr = new Nostr();
-  }, []);
+
   const [privateKey, setPrivateKey] = useState<string | null>(null);
   const [publicKey, setPublicKey] = useState<string | null>(null);
   const [recovery, setRecovery] = useState<boolean>(false);
   const [decrypt, setDecrypt] = useState<boolean>(false);
   const [otp, setOtp] = useState('');
+  const [doubleOtp, setDoubleOtp] = useState('');
+  const [decryptOtp, setDecryptOtp] = useState('');
   const [encryptedPrivateKey, setEncryptedPrivateKey] = useState<string | null>(null);
   const [iv, setIv] = useState<string | null>(null);
   const [decryptedPrivateKey, setDecryptedPrivateKey] = useState<string | null>(null);
 
+//   useEffect(() => {
+//     const privateKey = generatePrivateKey();
+//     const publicKey = getPublicKey(privateKey);
+//     setPrivateKey(privateKey);
+//     setPublicKey(publicKey);
+//     // const privateKey = sessionStorage.getItem('privateKey');
+//     // const publicKey = sessionStorage.getItem('publicKey');
+//     // setPrivateKey(privateKey);
+//     // setPublicKey(publicKey);
+//   }, []);
+
   const encypt = async () => {
+    if (Number(doubleOtp) !== Number(otp)) {
+        alert("Double OTP does not match");
+        return;
+    }
     if (privateKey && otp) {
         if (otp.length !== 6) {
             alert("Please enter a 6-digit recovery PIN.");
@@ -26,8 +41,9 @@ export default function Nostr() {
         //     otp.padEnd(32, '0')
         //   ).toString('base64');
         const key =  new TextEncoder().encode(otp.padEnd(32, '0'))
+        const keyString = Buffer.from(key).toString('base64');
         try {
-            const {ciphertext, iv} = await encryptSymmetric(privateKey, key);
+            const {ciphertext, iv} = await encryptSymmetric(privateKey, keyString);
             setEncryptedPrivateKey(ciphertext);
             setIv(iv);
         } catch (error) {
@@ -38,7 +54,7 @@ export default function Nostr() {
         alert("Please generate a private key and enter a 6-digit recovery PIN first.");
     }
     setRecovery(false);
-    setOtp('');
+    //setOtp('');
   }
 
   const encryptSymmetric = async (plaintext: string, key: string) => {
@@ -89,9 +105,16 @@ export default function Nostr() {
   }
 
   const decrypt2 = async () => {
-    if (encryptedPrivateKey && iv && otp) {
+    console.log('encryptedPrivateKey', encryptedPrivateKey)
+    console.log('iv', iv)
+    console.log('otp', otp)
+    if (Number(decryptOtp) !== Number(otp)) {
+        alert("Recovery PIN not correct");
+        return;
+    }
+    if (encryptedPrivateKey && iv && otp && decryptOtp) {
         const key = Buffer.from(
-            otp.padEnd(32, '0')
+            decryptOtp.padEnd(32, '0')
           ).toString('base64');
         try {
             const decryptedPrivateKey = await decryptSymmetric(encryptedPrivateKey, iv, key);
@@ -125,12 +148,18 @@ export default function Nostr() {
                 <h3>Recovery PIN: </h3>
                 <OtpInput
                     value={otp}
-                    onChange={setOtp}
+                    onChange={(otp) => setOtp(otp)}
                     numInputs={6}
                     renderSeparator={<span>-</span>}
                     renderInput={(props) => <input {...props} />}
                 />
-                {otp}
+                <OtpInput
+                    value={doubleOtp}
+                    onChange={(otp) => setDoubleOtp(otp)}
+                    numInputs={6}
+                    renderSeparator={<span>-</span>}
+                    renderInput={(props) => <input {...props} />}
+                />
                 <button onClick={encypt}>Encrypt</button>
             </div>
         )}
@@ -139,19 +168,23 @@ export default function Nostr() {
                 <h3>Encrypted Private Key: {encryptedPrivateKey}</h3>
             </div>
         {/* )} */}
-        <button onClick={() => {}}>Decrypt</button>
+        <button onClick={() => {setDecrypt(true)}}>Decrypt</button>
         {decrypt && (
             <div>
                 <OtpInput
-                    value={otp}
-                    onChange={setOtp}
-                    numInputs={4}
+                    value={decryptOtp}
+                    onChange={(decryptOtp) => setDecryptOtp(decryptOtp)}
+                    numInputs={6}
                     renderSeparator={<span>-</span>}
                     renderInput={(props) => <input {...props} />}
                 />
                 <button onClick={decrypt2}>
                     Confirm
                 </button>
+            </div>
+        )}
+        {decryptedPrivateKey && (
+            <div>
                     
                 <h3>Decrypted Private Key: {decryptedPrivateKey}</h3>
             </div>
