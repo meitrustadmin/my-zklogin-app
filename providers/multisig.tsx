@@ -1,7 +1,7 @@
 
 
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { identifiersAtom, multiSigAtom } from '../atoms';
 import { checkAuthRecoveryExists } from '../utils';
@@ -12,6 +12,7 @@ import { API_HOST } from 'lib/api/move';
 const MultisigAddressProvider = (props: { children: React.ReactNode }) => {
     const {user} = useZkLoginSession();
     const [multisigAddress, setMultisigAddress] = useAtom(multiSigAtom)
+    const [loading, setLoading] = useState(true);
     console.log('user?.identifier ' + user?.identifier)
     useEffect(() => {
         const fetchMultisigAddress = async () => {
@@ -28,9 +29,11 @@ const MultisigAddressProvider = (props: { children: React.ReactNode }) => {
             }
 
         };
-
        fetchMultisigAddress();
+       setLoading(false);
     }, [user?.identifier]);
+
+    if (loading) return <div>Load MultiAddress...</div>;
 
     //if (multisigAddress === undefined) return null; // Wait until we've checked for the multisig address
 
